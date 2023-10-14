@@ -19,8 +19,10 @@ const dateTest = (ctx) => {
 //router.get('/davetesta', dateTest);
 
 let departments = require('./departments.js');
+let teams = require('./teams.js');
 
 //app.use(router.routes());
 app.use(departments.routes());
+app.use(teams.routes());
 
 app.listen(3000);
