@@ -1,5 +1,5 @@
 const Router = require('@koa/router');
-const dbFunctions = require('./db/db.js');
+const departmentsProvider = require('./db/departments/departmentsProvider.js');
 
 // Prefix all routes with: /items
 const routerDepartments = new Router({
@@ -37,7 +37,7 @@ routerDepartments.get('/get/:id', (ctx, next) => {
 
 routerDepartments.get('/list', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    dbFunctions.listDepartments(function(err,result) {
+    departmentsProvider.list(function(err,result) {
       console.log(result);
       ctx.body = result;
       resolve();
