@@ -35,12 +35,16 @@ routerDepartments.get('/get/:id', (ctx, next) => {
   next();
 });
 
-routerDepartments.get('/list', (ctx, next) => {
-  dbFunctions.listDepartments(function(err,result) {
-    console.log(result);
-    ctx.body = result;
-    next();
+routerDepartments.get('/list', async (ctx, next) => {
+  await new Promise((resolve, reject) => {
+    dbFunctions.listDepartments(function(err,result) {
+      console.log(result);
+      ctx.body = result;
+      resolve();
+      console.log("resolved");
+    });    
   });
+  
 });
 
 /*

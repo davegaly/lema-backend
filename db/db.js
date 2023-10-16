@@ -37,7 +37,7 @@ function insertDepartment(params) {
     });
 }
 
-function listDepartments(callback) {
+async function listDepartments(callback) {
     const db = new sqlite3.Database(filepath, (error) => {
         if (error) {
           return console.error(error.message);
