@@ -1,9 +1,15 @@
 const Router = require('@koa/router');
+const dbFunctions = require('./db/db.js');
 
 // Prefix all routes with: /items
 const routerDepartments = new Router({
   prefix: '/departments',
 });
+
+//dbFunctions.createDbConnection();
+//dbFunctions.createTables();
+//dbFunctions.insertDepartment({name:'HR'});
+//dbFunctions.insertDepartment({name:'Business Sintesi'});
 
 let departmentsRecords = [
   { id: 100, iname: 'Quartz Analog Wrist Watch', price: 'US $4.99' },
@@ -30,8 +36,11 @@ routerDepartments.get('/get/:id', (ctx, next) => {
 });
 
 routerDepartments.get('/list', (ctx, next) => {
-  ctx.body = departmentsRecords;
-  next();
+  dbFunctions.listDepartments(function(err,result) {
+    console.log(result);
+    ctx.body = result;
+    next();
+  });
 });
 
 /*
