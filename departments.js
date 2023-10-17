@@ -34,7 +34,7 @@ routerDepartments.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     let params = {id: ctx.request.body.id, name: ctx.request.body.name};
     departmentsProvider.save(params, function(err,result) {
-      ctx.body = "ok";
+      ctx.body = result;
       resolve();
     });    
   });  

@@ -57,16 +57,22 @@ async function save(params, callback) {
             db.serialize(() => {
                 db.prepare(`UPDATE departments SET name=? WHERE id=?`, [params.name, params.id]).run().finalize();
                 db.close();
+            },
+            function() {
+                console.log("Department updated");
+                callback(null, "ok");
             });
-            console.log("Department updated");
         }
         else
         {
             db.serialize(() => {
                 db.prepare(`INSERT INTO departments (name) VALUES (?)`, params.name).run().finalize();
                 db.close();
-            });
-            console.log("Department added");
+            },
+            function() {
+                console.log("Department added");
+                callback(null, "ok");
+            });            
         }
     });
 }
