@@ -53,11 +53,21 @@ async function save(params, callback) {
         if (error) {
           return console.error(error.message);
         }
-        db.serialize(() => {
-            db.prepare(`INSERT INTO departments (name) VALUES (?)`, params.name).run().finalize();
-            db.close();
-        });
-        console.log("Department added");
+        if (params.id > 0) {
+            db.serialize(() => {
+                db.prepare(`UPDATE departments (name) VALUES (?) WHERE id=?`, [params.name, params.id]).run().finalize();
+                db.close();
+            });
+            console.log("Department updated");
+        }
+        else
+        {
+            db.serialize(() => {
+                db.prepare(`INSERT INTO departments (name) VALUES (?)`, params.name).run().finalize();
+                db.close();
+            });
+            console.log("Department added");
+        }
     });
 }
 
