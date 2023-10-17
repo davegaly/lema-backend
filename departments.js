@@ -19,32 +19,22 @@ let departmentsRecords = [
 ];
 
 // Routes
-routerDepartments.get('/get/:id', (ctx, next) => {
-  let getCurrentDepartment = departmentsRecords.filter(function (department) {
-    if (department.id == ctx.params.id) {
-      return true;
-    }
-  });
-
-  if (getCurrentDepartment.length) {
-    ctx.body = getCurrentDepartment[0];
-  } else {
-    ctx.response.status = 404;
-    ctx.body = 'Department Not Found';
-  }
-  next();
+routerDepartments.get('/getbyid/:id', async (ctx, next) => {
+  await new Promise((resolve, reject) => {
+    departmentsProvider.getById(ctx.params.id, function(err,result) {
+      ctx.body = result;
+      resolve();
+    });    
+  }); 
 });
 
 routerDepartments.get('/list', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     departmentsProvider.list(function(err,result) {
-      console.log(result);
       ctx.body = result;
       resolve();
-      console.log("resolved");
     });    
-  });
-  
+  });  
 });
 
 /*
