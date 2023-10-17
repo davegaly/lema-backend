@@ -55,7 +55,7 @@ async function save(params, callback) {
         }
         if (params.id > 0) {
             db.serialize(() => {
-                db.prepare(`UPDATE departments (name) VALUES (?) WHERE id=?`, [params.name, params.id]).run().finalize();
+                db.prepare(`UPDATE departments SET name=? WHERE id=?`, [params.name, params.id]).run().finalize();
                 db.close();
             });
             console.log("Department updated");
