@@ -1,6 +1,7 @@
 const Koa = require('koa');
 const logger = require('koa-logger');
 const cors = require("@koa/cors");
+const { koaBody } = require('koa-body');
 
 const app = new Koa();
 
@@ -8,6 +9,7 @@ const app = new Koa();
 
 app.use(logger());
 app.use(cors());
+app.use(koaBody());
 
 const helloWorld = (ctx) => {
   ctx.body = 'Hello World!!!';
