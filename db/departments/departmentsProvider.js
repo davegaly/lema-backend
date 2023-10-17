@@ -72,4 +72,4 @@ async function save(params, callback) {
 }
 
 
-module.exports = { getById, list }
+module.exports = { getById, list, save }
