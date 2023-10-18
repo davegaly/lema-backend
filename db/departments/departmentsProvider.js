@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const filepath = "./db/main.db";
+const filepath = "./db/main.sqlite";
 
 
 // get by id
