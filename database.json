@@ -1,5 +1,5 @@
 {
-    "defaultEnv": "dev",
+    "defaultEnv": {"ENV": "SERVER_ENV"},
 
     "dev": {
       "driver": "sqlite3",
