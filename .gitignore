@@ -1,3 +1,4 @@
 node_modules
+/db/main.sqlite
 db/main.sqlite
 database.json
