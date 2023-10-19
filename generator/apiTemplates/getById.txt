@@ -1,7 +1,7 @@
 // getbyid
-departmentsRouter.get('/getbyid/:id', async (ctx, next) => {
+##tableName##Router.get('/getbyid/:id', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    departmentsProvider.getById(ctx.params.id, function(err,result) {
+    ##tableName##Provider.getById(ctx.params.id, function(err,result) {
       ctx.body = result;
       resolve();
     });    

@@ -1,9 +1,9 @@
-// getbyid
-departmentsRouter.get('/getbyid/:id', async (ctx, next) => {
+// list all
+##tableName##Router.get('/listall', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    departmentsProvider.getById(ctx.params.id, function(err,result) {
+    ##tableName##Provider.listAll(function(err,result) {
       ctx.body = result;
       resolve();
     });    
-  }); 
+  });  
 });

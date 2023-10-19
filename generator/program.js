@@ -10,6 +10,7 @@ let fileTemplateProvider = "./generator/templateProvider.txt";
 let fileTemplateAPI = "./generator/templateAPI.txt";
 let contentTemplateProvider = '';
 let contentTemplateAPI = '';
+let contentTemplateSingleAPI = '';
 let filesToWrite = [];
 
 // reads structure content
@@ -99,29 +100,17 @@ function workTemplateSingleAPI() {
     thisAPIContent = thisAPIContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
 
     let apiCode = '';
-    Object.keys(structureCurrentTableObject.api).forEach(apiIndex => {
-        apiObject = structureCurrentTableObject.api[apiIndex];
+    for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
+        const apiObject = structureCurrentTableObject.api[i];
         let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
-        //readTemplateSingleAPI(templateAPIFile, function(contentTemplateSingleAPI){
-          //  apiCode += contentTemplateSingleAPI;
-        //}); 
-        let a = readTemplateSingleAPI(templateAPIFile);
-        console.log("BEFORE");
-
-    });
-    console.log("AFTER");
+        let singleAPITemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
+        singleAPITemplateContent = replaceKeyWordsSingleAPIContent(singleAPITemplateContent);
+        apiCode += "\n\n" + singleAPITemplateContent;
+    }
     thisAPIContent = thisAPIContent.replaceAll("##apiContent##", apiCode);
 
     return thisAPIContent;
 }
-function readTemplateSingleAPI(path) {
-    fs.readFile(path, async (err,res) => {
-        let file = res;
-        contentTemplateSingleAPI = await res.toString('utf-8');
-        return contentTemplateAPI
-    });
-}
-
 
 // writes the result
 function writeTemplateContent() {
@@ -141,6 +130,11 @@ function writeTemplateContentSingleFile(params, callback) {
     });
 }
 
+
+function replaceKeyWordsSingleAPIContent(singleAPITemplateContent) {
+    singleAPITemplateContent = singleAPITemplateContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
+    return singleAPITemplateContent;
+}
 
 // replace values in templates functions
 function replaceFieldsAsObject(tableObject) {
