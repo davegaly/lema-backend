@@ -71,10 +71,10 @@ async function save(params, callback) {
             db.serialize(() => {
                 db.prepare(`INSERT INTO departments (name) VALUES (?)`, [params.name]).run(
                     err => {
-                        console.log(err.message);
+                        if (err) console.log(err.message);
                     }
                 ).finalize(err => {
-                    console.log(err.message);
+                    if (err) console.log(err.message);
                 });
                 db.close();
                 callback(null, "ok");
