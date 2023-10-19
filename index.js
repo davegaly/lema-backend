@@ -33,8 +33,8 @@ app.use(teams.routes());
 
 
 // testers
-//const departmentsProvider = require('./db/providers/departmentsProvider.js');
-//departmentsProvider.save({"id":0, "name":"Business Sintesi"}, function(){});
+const departmentsProvider = require('./db/providers/departmentsProvider.js');
+departmentsProvider.save({"id":0, "name":"Business Compagnie"}, function(){});
 
 
 app.listen(3000);

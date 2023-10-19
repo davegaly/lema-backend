@@ -37,17 +37,13 @@ async function listAll(callback) {
             let result = [];
             db.each(`SELECT * FROM departments`, (error, row) => {
                 if (error) {console.log("aasdasdssd" + row.name);return console.log(error);}
-                console.log(row);
                 let newRecord = 
 				{
 					name:row.name,
 				}                
-                console.log("asdsss" + row.name);
                 result.push(newRecord);
-                console.log(newRecord);
             },
             function() {
-                console.log("asddd1111dd" + result);
                 callback(null, result);
             });
         });
@@ -61,7 +57,13 @@ async function save(params, callback) {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
-                db.prepare(`UPDATE departments SET name=? WHERE id=?`, [params.name,params.id]).run().finalize();
+                db.prepare(`UPDATE departments SET name=? WHERE id=?`, [params.name,params.id]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
                 db.close();
                 callback(null, "ok");
             });
@@ -71,10 +73,10 @@ async function save(params, callback) {
             db.serialize(() => {
                 db.prepare(`INSERT INTO departments (name) VALUES (?)`, [params.name]).run(
                     err => {
-                        if (err) console.log(err.message);
+                        if (err != null) { db.close(); console.log(err.message) };
                     }
                 ).finalize(err => {
-                    if (err) console.log(err.message);
+                    if (err != null) { db.close(); console.log(err.message) };
                 });
                 db.close();
                 callback(null, "ok");
