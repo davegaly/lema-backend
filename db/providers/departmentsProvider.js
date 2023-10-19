@@ -17,7 +17,7 @@ async function getById(id, callback) {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
-					name:name,
+id: row.id,					name: row.name,
 				}                
                 result = recordToReturn;
             },
@@ -36,10 +36,10 @@ async function listAll(callback) {
         db.serialize(() => {
             let result = [];
             db.each(`SELECT * FROM departments`, (error, row) => {
-                if (error) {console.log("aasdasdssd" + row.name);return console.log(error);}
+                if (error) {return console.log(error);}
                 let newRecord = 
 				{
-					name:row.name,
+id: row.id,					name: row.name,
 				}                
                 result.push(newRecord);
             },
@@ -75,9 +75,9 @@ async function save(params, callback) {
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
-                ).finalize(err => {
-                    if (err != null) { db.close(); console.log(err.message) };
-                });
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
                 db.close();
                 callback(null, "ok");
             });            

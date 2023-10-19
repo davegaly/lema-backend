@@ -4,13 +4,23 @@
             "tableName":"departments",
             "fields":[
                 {"fieldName":"name", "fieldType":"TEXT"}
-            ]
+            ],
+            "api": [
+                {"type":"classic", "name":"getById"},
+                {"type":"classic", "name":"listAll"},
+                {"type":"classic", "name":"save"}
+            ]     
         },        
         {
             "tableName":"teams",
             "fields":[
                 {"fieldName":"name", "fieldType":"TEXT"}
-            ]
+            ],
+            "api": [
+                {"type":"classic", "name":"getById"},
+                {"type":"classic", "name":"listAll"},
+                {"type":"classic", "name":"save"}
+            ]  
         },
         {
             "tableName":"employees",
@@ -19,7 +29,12 @@
                 {"fieldName":"lastName", "fieldType":"TEXT"},
                 {"fieldName":"email1", "fieldType":"TEXT"},
                 {"fieldName":"phone1", "fieldType":"TEXT"}
-            ]
+            ],
+            "api": [
+                {"type":"classic", "name":"getById"},
+                {"type":"classic", "name":"listAll"},
+                {"type":"classic", "name":"save"}
+            ]  
         }
     ]
 }

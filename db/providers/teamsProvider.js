@@ -17,7 +17,7 @@ async function getById(id, callback) {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
-					name:name,
+id: row.id,					name: row.name,
 				}                
                 result = recordToReturn;
             },
@@ -39,7 +39,7 @@ async function listAll(callback) {
                 if (error) {return console.log(error);}
                 let newRecord = 
 				{
-					name:name,
+id: row.id,					name: row.name,
 				}                
                 result.push(newRecord);
             },
@@ -57,7 +57,13 @@ async function save(params, callback) {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
-                db.prepare(`UPDATE teams SET name=? WHERE id=?`, [params.name,params.id]).run().finalize();
+                db.prepare(`UPDATE teams SET name=? WHERE id=?`, [params.name,params.id]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
                 db.close();
                 callback(null, "ok");
             });
@@ -65,7 +71,13 @@ async function save(params, callback) {
         else
         {
             db.serialize(() => {
-                db.prepare(`INSERT INTO teams (name) VALUES (?)`, [params.name]).run().finalize();
+                db.prepare(`INSERT INTO teams (name) VALUES (?)`, [params.name]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
                 db.close();
                 callback(null, "ok");
             });            

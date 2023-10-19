@@ -17,10 +17,10 @@ async function getById(id, callback) {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
-					firstName:firstName,
-					lastName:lastName,
-					email1:email1,
-					phone1:phone1,
+id: row.id,					firstName: row.firstName,
+					lastName: row.lastName,
+					email1: row.email1,
+					phone1: row.phone1,
 				}                
                 result = recordToReturn;
             },
@@ -42,10 +42,10 @@ async function listAll(callback) {
                 if (error) {return console.log(error);}
                 let newRecord = 
 				{
-					firstName:firstName,
-					lastName:lastName,
-					email1:email1,
-					phone1:phone1,
+id: row.id,					firstName: row.firstName,
+					lastName: row.lastName,
+					email1: row.email1,
+					phone1: row.phone1,
 				}                
                 result.push(newRecord);
             },
@@ -63,7 +63,13 @@ async function save(params, callback) {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
-                db.prepare(`UPDATE employees SET firstName=?,lastName=?,email1=?,phone1=? WHERE id=?`, [params.firstName,params.lastName,params.email1,params.phone1,params.id]).run().finalize();
+                db.prepare(`UPDATE employees SET firstName=?,lastName=?,email1=?,phone1=? WHERE id=?`, [params.firstName,params.lastName,params.email1,params.phone1,params.id]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
                 db.close();
                 callback(null, "ok");
             });
@@ -71,7 +77,13 @@ async function save(params, callback) {
         else
         {
             db.serialize(() => {
-                db.prepare(`INSERT INTO employees (firstName,lastName,email1,phone1) VALUES (?,?,?,?)`, [params.firstName,params.lastName,params.email1,params.phone1]).run().finalize();
+                db.prepare(`INSERT INTO employees (firstName,lastName,email1,phone1) VALUES (?,?,?,?)`, [params.firstName,params.lastName,params.email1,params.phone1]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
                 db.close();
                 callback(null, "ok");
             });            

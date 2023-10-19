@@ -7,7 +7,9 @@ let structurePath = "./generator/structure.json";
 let structureObject = {};
 let structureCurrentTableObject = {};
 let fileTemplateProvider = "./generator/templateProvider.txt";
+let fileTemplateAPI = "./generator/templateAPI.txt";
 let contentTemplateProvider = '';
+let contentTemplateAPI = '';
 let filesToWrite = [];
 
 // reads structure content
@@ -19,7 +21,7 @@ function readStructureContent(callback) {
 }
 readStructureContent(function(data){
     structureObject = JSON.parse(data);
-    console.log(structureObject);
+    //console.log(structureObject);
 });
 
 // reads template content
@@ -30,9 +32,19 @@ function readTemplateContent(callback) {
         callback(contentTemplateProvider);
     });
 }
+function readAPIContent(callback) {
+    fs.readFile(fileTemplateAPI, (err,res) => {
+        let file = res;
+        contentTemplateAPI = res.toString('utf-8');
+        callback(contentTemplateAPI);
+    });
+}
 readTemplateContent(function(data){
-    console.log("Template was read");
-    workTemplateValues();
+    console.log("Template Provider was read");
+    readAPIContent(function(data){
+        console.log("Template API was read");
+        workTemplateValues();
+    });
 });
 
 
@@ -44,20 +56,26 @@ function workTemplateValues() {
         
         structureCurrentTableObject = structureObject.tables[tableIndex];
         console.log("Working on table:");
-        console.log(structureCurrentTableObject);
 
-        // provider content for this file
+        // provider content for this table
         let thisProviderContent = workTemplateSingleProvider();
-
-        // file to write
-        let newFileToWrite = {
+        let newFileToWriteProvider = {
             path: './db/providers/' + structureCurrentTableObject.tableName + "Provider.js",
             content: thisProviderContent
         }
-        filesToWrite.push(newFileToWrite);
+        filesToWrite.push(newFileToWriteProvider);
+
+        // api content for this table
+        let thisAPIContent = workTemplateSingleAPI();
+        let newFileToWriteAPI = {
+            path: './api/' + structureCurrentTableObject.tableName + "API.js",
+            content: thisAPIContent
+        }
+        filesToWrite.push(newFileToWriteAPI);
 
     })
-    writeTemplateContent()
+
+    writeTemplateContent();
 }
 function workTemplateSingleProvider() {
     let thisProviderContent = contentTemplateProvider;
@@ -76,11 +94,37 @@ function workTemplateSingleProvider() {
     thisProviderContent = thisProviderContent.replaceAll("##listInsertFieldsArray##", replaceListInsertFieldsArray(structureCurrentTableObject));   
     return thisProviderContent;
 }
+function workTemplateSingleAPI() {
+    let thisAPIContent = contentTemplateAPI;
+    thisAPIContent = thisAPIContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
+
+    let apiCode = '';
+    Object.keys(structureCurrentTableObject.api).forEach(apiIndex => {
+        apiObject = structureCurrentTableObject.api[apiIndex];
+        let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
+        //readTemplateSingleAPI(templateAPIFile, function(contentTemplateSingleAPI){
+          //  apiCode += contentTemplateSingleAPI;
+        //}); 
+        let a = readTemplateSingleAPI(templateAPIFile);
+        console.log("BEFORE");
+
+    });
+    console.log("AFTER");
+    thisAPIContent = thisAPIContent.replaceAll("##apiContent##", apiCode);
+
+    return thisAPIContent;
+}
+function readTemplateSingleAPI(path) {
+    fs.readFile(path, async (err,res) => {
+        let file = res;
+        contentTemplateSingleAPI = await res.toString('utf-8');
+        return contentTemplateAPI
+    });
+}
 
 
 // writes the result
 function writeTemplateContent() {
-    console.log(filesToWrite);
     Object.keys(filesToWrite).forEach(newFileToWrite => {
         let thisFileToWrite = filesToWrite[newFileToWrite];
         writeTemplateContentSingleFile(thisFileToWrite, function(data){
@@ -101,9 +145,10 @@ function writeTemplateContentSingleFile(params, callback) {
 // replace values in templates functions
 function replaceFieldsAsObject(tableObject) {
     let result = '\t\t\t\t{\n';
+    result += "id: row.id,";
     Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = "row." + tableObject.fields[fieldIndex];
-        result += '\t\t\t\t\t' + fieldProperties.fieldName + ":" + fieldProperties.fieldName + ",";
+        let fieldProperties = tableObject.fields[fieldIndex];
+        result += '\t\t\t\t\t' + fieldProperties.fieldName + ": row." + fieldProperties.fieldName + ",";
         result += '\n';
     });
     result += '\t\t\t\t}';
