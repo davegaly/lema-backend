@@ -1,0 +1,25 @@
+{
+    "tables":[
+        {
+            "tableName":"departments",
+            "fields":[
+                {"fieldName":"name", "fieldType":"TEXT"}
+            ]
+        },        
+        {
+            "tableName":"teams",
+            "fields":[
+                {"fieldName":"name", "fieldType":"TEXT"}
+            ]
+        },
+        {
+            "tableName":"employees",
+            "fields":[
+                {"fieldName":"firstName", "fieldType":"TEXT"},
+                {"fieldName":"lastName", "fieldType":"TEXT"},
+                {"fieldName":"email1", "fieldType":"TEXT"},
+                {"fieldName":"phone1", "fieldType":"TEXT"}
+            ]
+        }
+    ]
+}

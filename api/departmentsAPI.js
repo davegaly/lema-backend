@@ -1,17 +1,12 @@
 const Router = require('@koa/router');
-const departmentsProvider = require('./db/departments/departmentsProvider.js');
+const departmentsProvider = require('../db/providers/departmentsProvider.js');
 
 // Prefix all routes with: /items
 const routerDepartments = new Router({
-  prefix: '/departments',
+  prefix: '/api/departments',
 });
 
-//dbFunctions.createDbConnection();
-//dbFunctions.createTables();
-//dbFunctions.insertDepartment({name:'HR'});
-//dbFunctions.insertDepartment({name:'Business Sintesi'});
-
-// Routes
+// getbyid
 routerDepartments.get('/getbyid/:id', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     departmentsProvider.getById(ctx.params.id, function(err,result) {
@@ -21,9 +16,10 @@ routerDepartments.get('/getbyid/:id', async (ctx, next) => {
   }); 
 });
 
-routerDepartments.get('/list', async (ctx, next) => {
+// list all
+routerDepartments.get('/listall', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    departmentsProvider.list(function(err,result) {
+    departmentsProvider.listAll(function(err,result) {
       ctx.body = result;
       resolve();
     });    
