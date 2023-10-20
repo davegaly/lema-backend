@@ -25,11 +25,11 @@ const dateTest = (ctx) => {
 //router.get('/davetesta', dateTest);
 
 let departmentsAPI = require('./api/departmentsAPI.js');
-let teams = require('./teams.js');
+let testAPI = require('./api/testAPI.js');
 
 //app.use(router.routes());
 app.use(departmentsAPI.routes());
-app.use(teams.routes());
+app.use(testAPI.routes());
 
 
 // testers

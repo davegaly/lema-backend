@@ -13,6 +13,7 @@ async function getById(id, callback) {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
+            console.log("teamsProvider->getById Started");
             db.each(`SELECT * FROM teams WHERE id = ?`, [id], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
@@ -22,6 +23,7 @@ id: row.id,					name: row.name,
                 result = recordToReturn;
             },
             function() {
+                console.log("teamsProvider->getById Finished (callback)");
                 callback(null, result);
             });
         });
@@ -35,6 +37,7 @@ async function listAll(callback) {
         if (error) {return console.error(error.message);}
         db.serialize(() => {
             let result = [];
+            console.log("teamsProvider->listall Started");
             db.each(`SELECT * FROM teams`, (error, row) => {
                 if (error) {return console.log(error);}
                 let newRecord = 
@@ -44,6 +47,7 @@ id: row.id,					name: row.name,
                 result.push(newRecord);
             },
             function() {
+                console.log("teamsProvider->listAll Finished (result count:" + result.length + ")");
                 callback(null, result);
             });
         });
@@ -57,6 +61,7 @@ async function save(params, callback) {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
+                console.log("teamsProvider->save(update) Started");
                 db.prepare(`UPDATE teams SET name=? WHERE id=?`, [params.name,params.id]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
@@ -65,12 +70,14 @@ async function save(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
+                console.log("teamsProvider->save(update) Finished");
                 callback(null, "ok");
             });
         }
         else
         {
             db.serialize(() => {
+                console.log("teamsProvider->save(insert) Started");
                 db.prepare(`INSERT INTO teams (name) VALUES (?)`, [params.name]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
@@ -79,6 +86,7 @@ async function save(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
+                console.log("teamsProvider->save(insert) Finished");
                 callback(null, "ok");
             });            
         }

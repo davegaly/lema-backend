@@ -11,8 +11,10 @@ const departmentsRouter = new Router({
 // getbyid
 departmentsRouter.get('/getbyid/:id', async (ctx, next) => {
   await new Promise((resolve, reject) => {
+    console.log("departmentsAPI->save(getbyid), wtih id " + ctx.params.id + " Started");
     departmentsProvider.getById(ctx.params.id, function(err,result) {
       ctx.body = result;
+      console.log("departmentsAPI->save(getbyid) finished");
       resolve();
     });    
   }); 
@@ -21,8 +23,10 @@ departmentsRouter.get('/getbyid/:id', async (ctx, next) => {
 // list all
 departmentsRouter.get('/listall', async (ctx, next) => {
   await new Promise((resolve, reject) => {
+    console.log("departmentsAPI->listall Started");
     departmentsProvider.listAll(function(err,result) {
       ctx.body = result;
+      console.log("departmentsAPI->listall finished");
       resolve();
     });    
   });  
@@ -32,8 +36,10 @@ departmentsRouter.get('/listall', async (ctx, next) => {
 departmentsRouter.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     let params = {id: ctx.request.body.id, name: ctx.request.body.name};
+    console.log("departmentsAPI->save(" + params + ") Started");
     departmentsProvider.save(params, function(err,result) {
       ctx.body = result;
+      console.log("departmentsAPI->save finished");
       resolve();
     });    
   });  

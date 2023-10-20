@@ -13,6 +13,7 @@ async function getById(id, callback) {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
+            console.log("employeesProvider->getById Started");
             db.each(`SELECT * FROM employees WHERE id = ?`, [id], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
@@ -25,6 +26,7 @@ id: row.id,					firstName: row.firstName,
                 result = recordToReturn;
             },
             function() {
+                console.log("employeesProvider->getById Finished (callback)");
                 callback(null, result);
             });
         });
@@ -38,6 +40,7 @@ async function listAll(callback) {
         if (error) {return console.error(error.message);}
         db.serialize(() => {
             let result = [];
+            console.log("employeesProvider->listall Started");
             db.each(`SELECT * FROM employees`, (error, row) => {
                 if (error) {return console.log(error);}
                 let newRecord = 
@@ -50,6 +53,7 @@ id: row.id,					firstName: row.firstName,
                 result.push(newRecord);
             },
             function() {
+                console.log("employeesProvider->listAll Finished (result count:" + result.length + ")");
                 callback(null, result);
             });
         });
@@ -63,6 +67,7 @@ async function save(params, callback) {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
+                console.log("employeesProvider->save(update) Started");
                 db.prepare(`UPDATE employees SET firstName=?,lastName=?,email1=?,phone1=? WHERE id=?`, [params.firstName,params.lastName,params.email1,params.phone1,params.id]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
@@ -71,12 +76,14 @@ async function save(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
+                console.log("employeesProvider->save(update) Finished");
                 callback(null, "ok");
             });
         }
         else
         {
             db.serialize(() => {
+                console.log("employeesProvider->save(insert) Started");
                 db.prepare(`INSERT INTO employees (firstName,lastName,email1,phone1) VALUES (?,?,?,?)`, [params.firstName,params.lastName,params.email1,params.phone1]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
@@ -85,6 +92,7 @@ async function save(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
+                console.log("employeesProvider->save(insert) Finished");
                 callback(null, "ok");
             });            
         }
