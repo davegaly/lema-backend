@@ -1,6 +1,4 @@
-const migrationHelper = {}
-
-migrationHelper.addSystemFields = (createTableObject) => {
+function addSystemFields(createTableObject) {
    
     createTableObject.isDeleted = 'int';
     createTableObject.createdDate = 'string';
@@ -11,4 +9,4 @@ migrationHelper.addSystemFields = (createTableObject) => {
     return createTableObject;
 }
 
-export default migrationHelper;
+module.exports = { addSystemFields }

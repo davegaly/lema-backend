@@ -1,6 +1,6 @@
 'use strict';
 
-import migrationHelper from 'migrationHelper.mjs';
+const migrationHelper = require("./helper/migrationHelper");
 
 var dbm;
 var type;
@@ -18,7 +18,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
 
-  tableFields = {};
+  let tableFields = {};
   tableFields.id = { type: 'int', primaryKey: true, autoIncrement: true };
   tableFields.name = 'string';
 
