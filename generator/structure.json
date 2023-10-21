@@ -14,7 +14,8 @@
         {
             "tableName":"teams",
             "fields":[
-                {"fieldName":"name", "fieldType":"TEXT"}
+                {"fieldName":"name", "fieldType":"TEXT"},
+                {"fieldName":"departmentId", "fieldType":"NUMBER"}
             ],
             "api": [
                 {"type":"classic", "name":"getById"},

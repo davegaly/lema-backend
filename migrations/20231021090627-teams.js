@@ -1,7 +1,5 @@
 'use strict';
 
-import migrationHelper from 'migrationHelper.mjs';
-
 var dbm;
 var type;
 var seed;
@@ -17,18 +15,16 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-
-  tableFields = {};
-  tableFields.id = { type: 'int', primaryKey: true, autoIncrement: true };
-  tableFields.name = 'string';
-
-  tableFields = migrationHelper.addSystemFields(tableFields);
-
-  return db.createTable('departments', tableFields);
+  return db.createTable('teams', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
+    name: 'string',
+    departmentId: 'int'
+  });
 };
 
 exports.down = function(db) {
-  return db.dropTable('departments');
+  return db.dropTable('teams');
+  return null;
 };
 
 exports._meta = {

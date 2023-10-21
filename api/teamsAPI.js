@@ -35,7 +35,7 @@ teamsRouter.get('/listall', async (ctx, next) => {
 // save
 teamsRouter.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    let params = {id: ctx.request.body.id, name: ctx.request.body.name};
+    let params = {id: ctx.request.id, name: ctx.request.body.name, departmentId: ctx.request.body.departmentId};
     console.log("teamsAPI->save(" + params + ") Started");
     teamsProvider.save(params, function(err,result) {
       ctx.body = result;

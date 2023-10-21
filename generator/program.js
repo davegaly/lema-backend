@@ -133,6 +133,15 @@ function writeTemplateContentSingleFile(params, callback) {
 
 function replaceKeyWordsSingleAPIContent(singleAPITemplateContent) {
     singleAPITemplateContent = singleAPITemplateContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
+
+    let fieldsParamsBodySave = '';
+    fieldsParamsBodySave = 'id: ctx.request.id'
+    Object.keys(structureCurrentTableObject.fields).forEach(fieldIndex => {
+        let fieldProperties = structureCurrentTableObject.fields[fieldIndex];
+        fieldsParamsBodySave += ', ' + fieldProperties.fieldName + ": ctx.request.body." + fieldProperties.fieldName;
+    });
+    singleAPITemplateContent =  singleAPITemplateContent.replaceAll("##listParamsBodySave##", fieldsParamsBodySave); 
+
     return singleAPITemplateContent;
 }
 

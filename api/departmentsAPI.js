@@ -35,7 +35,7 @@ departmentsRouter.get('/listall', async (ctx, next) => {
 // save
 departmentsRouter.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    let params = {id: ctx.request.body.id, name: ctx.request.body.name};
+    let params = {id: ctx.request.id, name: ctx.request.body.name};
     console.log("departmentsAPI->save(" + params + ") Started");
     departmentsProvider.save(params, function(err,result) {
       ctx.body = result;

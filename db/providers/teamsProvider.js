@@ -19,6 +19,7 @@ async function getById(id, callback) {
                 let recordToReturn = 
 				{
 id: row.id,					name: row.name,
+					departmentId: row.departmentId,
 				}                
                 result = recordToReturn;
             },
@@ -43,6 +44,7 @@ async function listAll(callback) {
                 let newRecord = 
 				{
 id: row.id,					name: row.name,
+					departmentId: row.departmentId,
 				}                
                 result.push(newRecord);
             },
@@ -62,7 +64,7 @@ async function save(params, callback) {
         if (params.id > 0) {
             db.serialize(() => {
                 console.log("teamsProvider->save(update) Started");
-                db.prepare(`UPDATE teams SET name=? WHERE id=?`, [params.name,params.id]).run(
+                db.prepare(`UPDATE teams SET name=?,departmentId=? WHERE id=?`, [params.name,params.departmentId,params.id]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
@@ -78,7 +80,7 @@ async function save(params, callback) {
         {
             db.serialize(() => {
                 console.log("teamsProvider->save(insert) Started");
-                db.prepare(`INSERT INTO teams (name) VALUES (?)`, [params.name]).run(
+                db.prepare(`INSERT INTO teams (name,departmentId) VALUES (?,?)`, [params.name,params.departmentId]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }

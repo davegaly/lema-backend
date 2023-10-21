@@ -35,7 +35,7 @@ employeesRouter.get('/listall', async (ctx, next) => {
 // save
 employeesRouter.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    let params = {id: ctx.request.body.id, name: ctx.request.body.name};
+    let params = {id: ctx.request.id, firstName: ctx.request.body.firstName, lastName: ctx.request.body.lastName, email1: ctx.request.body.email1, phone1: ctx.request.body.phone1};
     console.log("employeesAPI->save(" + params + ") Started");
     employeesProvider.save(params, function(err,result) {
       ctx.body = result;
