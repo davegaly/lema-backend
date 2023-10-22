@@ -4,6 +4,7 @@
 //------------------------------------------------------
 
 const sqlite3 = require("sqlite3").verbose();
+const uuid = require('uuid');
 const filepath = "./db/main.sqlite";
 
 
@@ -78,7 +79,9 @@ async function save(params, callback) {
         {
             db.serialize(() => {
                 console.log("departmentsProvider->save(insert) Started");
-                db.prepare(`INSERT INTO departments (name) VALUES (?)`, [params.name]).run(
+                const uniqueUUID = uuid.v4();
+                console.log("Generated guid for new record: " + uniqueUUID);
+                db.prepare(`INSERT INTO departments (name, guid) VALUES (?, ?)`, [params.name, uniqueUUID]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }

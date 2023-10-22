@@ -1,5 +1,6 @@
 function addSystemFields(createTableObject) {
    
+    createTableObject.guid = 'uuid';
     createTableObject.isDeleted = 'int';
     createTableObject.createdDate = 'string';
     createTableObject.createdBy = 'string';
