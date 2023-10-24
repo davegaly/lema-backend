@@ -1,0 +1,20 @@
+// getByGuid
+async function getByGuid(guid, callback) {
+    const db = new sqlite3.Database(filepath, (error) => {
+        if (error) {return console.log(error.message);}
+        db.serialize(() => {
+            let result = {};
+            console.log("##tableName##Provider->getByGuid Started");
+            db.each(`SELECT * FROM ##tableName## WHERE guid = ?`, [guid], (error, row) => {
+                if (error) {return console.log(error);}
+                let recordToReturn = 
+##FieldsAsObject##                
+                result = recordToReturn;
+            },
+            function() {
+                console.log("##tableName##Provider->getByGuid Finished (callback)");
+                callback(null, result);
+            });
+        });
+    });
+}
