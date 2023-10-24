@@ -6,9 +6,29 @@
                 {"fieldName":"name", "fieldType":"TEXT"}
             ],
             "api": [
-                {"type":"classic", "name":"getById"},
-                {"type":"classic", "name":"listAll"},
-                {"type":"classic", "name":"save"}
+                {
+                    "type":"get", 
+                    "name":"getByGuid",
+                    "apiReturnFields": ["guid","name"]
+                },
+                {
+                    "type":"list", 
+                    "name":"listForGrid",
+                    "apiReturnFields": ["guid","name"]
+                },
+                {
+                    "type":"list", 
+                    "name":"listForDropdown",
+                    "apiReturnFields": ["guid","name"]
+                },
+                {
+                    "type":"save", 
+                    "name":"save"
+                },      
+                {
+                    "type":"delete", 
+                    "name":"delete"
+                }
             ]     
         },        
         {
