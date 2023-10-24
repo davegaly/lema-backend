@@ -1,10 +1,9 @@
-// getByGuid
-async function getByGuid(guid, callback) {
+async function ##apiName##(guid, callback) {
     const db = new sqlite3.Database(filepath, (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
-            console.log("##tableName##Provider->getByGuid Started");
+            console.log("##tableName##Provider->##apiName## Started");
             db.each(`SELECT * FROM ##tableName## WHERE guid = ?`, [guid], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
@@ -12,7 +11,7 @@ async function getByGuid(guid, callback) {
                 result = recordToReturn;
             },
             function() {
-                console.log("##tableName##Provider->getByGuid Finished (callback)");
+                console.log("##tableName##Provider->##apiName## Finished (callback)");
                 callback(null, result);
             });
         });

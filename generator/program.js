@@ -13,51 +13,29 @@ let contentTemplateAPI = '';
 let contentTemplateSingleAPI = '';
 let filesToWrite = [];
 
-// reads structure content
-function readStructureContent(callback) {
-    fs.readFile(structurePath, (err,res) => {
-        let file = res;
-        callback(res.toString('utf-8'));
-    });
-}
-readStructureContent(function(data){
-    structureObject = JSON.parse(data);
-    //console.log(structureObject);
-});
 
-// reads template content
-function readTemplateContent(callback) {
-    fs.readFile(fileTemplateProvider, (err,res) => {
-        let file = res;
-        contentTemplateProvider = res.toString('utf-8');
-        callback(contentTemplateProvider);
-    });
-}
-function readAPIContent(callback) {
-    fs.readFile(fileTemplateAPI, (err,res) => {
-        let file = res;
-        contentTemplateAPI = res.toString('utf-8');
-        callback(contentTemplateAPI);
-    });
-}
-readTemplateContent(function(data){
-    console.log("Template Provider was read");
-    readAPIContent(function(data){
-        console.log("Template API was read");
-        workTemplateValues();
-    });
-});
+// 1.0 - reads structure content (structure.json)
+structureObject = JSON.parse(fs.readFileSync(structurePath, 'utf8'));
+console.log("structureObject created succesfully!"); 
 
+// 2.0 - reads templateProvider skeleton
+contentTemplateProvider = fs.readFileSync(fileTemplateProvider, 'utf8');
+console.log("templateProvider skeleton read succesfully!"); 
 
-// working on the template
+// 2.1 - creating a provider file for each table in the structure.json
 function workTemplateValues() {
 
     // iterate tables in the structure
     Object.keys(structureObject.tables).forEach(tableIndex => {
         
         structureCurrentTableObject = structureObject.tables[tableIndex];
-        console.log("Working on table:");
+        console.log("Working on provider file for table: " + structureCurrentTableObject.tableName);
 
+        console.log("Begin create provider content");
+        let thisProviderContent = workTemplateSingleProvider();
+        console.log("Finished create provider content")
+
+        /*
         // provider content for this table
         let thisProviderContent = workTemplateSingleProvider();
         let newFileToWriteProvider = {
@@ -73,12 +51,37 @@ function workTemplateValues() {
             content: thisAPIContent
         }
         filesToWrite.push(newFileToWriteAPI);
+        */
 
     })
 
-    writeTemplateContent();
+    //writeTemplateContent();
 }
+workTemplateValues();
+
+
+
+
+// 4.0 - reads templates for API
+//contentTemplateAPI = fs.readFileSync(fileTemplateAPI);
+
+
+
+
+
+
 function workTemplateSingleProvider() {
+    
+    let apiCode = '';
+    for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
+        const apiObject = structureCurrentTableObject.api[i];
+        let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
+        let singleAPITemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
+        singleAPITemplateContent = replaceKeyWordsSingleAPIContent(singleAPITemplateContent);
+        apiCode += "\n\n" + singleAPITemplateContent;
+    }
+
+
     let thisProviderContent = contentTemplateProvider;
     thisProviderContent = thisProviderContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
     //##FieldsAsObject##
