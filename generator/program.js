@@ -74,7 +74,14 @@ function workTemplateSingleProvider() {
     
     let apiCode = '';
     for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
+
         const apiObject = structureCurrentTableObject.api[i];
+        console.log("Working Provider " + structureCurrentTableObject.tableName + ", api: " + apiObject.name);
+        
+        let templateProviderFileSingleFunctionPath = "./generator/providerTemplates/" + apiObject.type + ".txt";
+        let singleProviderFunctionTemplate = fs.readFileSync(templateProviderFileSingleFunctionPath, 'utf8');
+        console.log("Reading single provider function template: OK");
+
         let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
         let singleAPITemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
         singleAPITemplateContent = replaceKeyWordsSingleAPIContent(singleAPITemplateContent);
@@ -82,6 +89,7 @@ function workTemplateSingleProvider() {
     }
 
 
+    /*
     let thisProviderContent = contentTemplateProvider;
     thisProviderContent = thisProviderContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
     //##FieldsAsObject##
@@ -97,6 +105,7 @@ function workTemplateSingleProvider() {
     //##listInsertFieldsArray##
     thisProviderContent = thisProviderContent.replaceAll("##listInsertFieldsArray##", replaceListInsertFieldsArray(structureCurrentTableObject));   
     return thisProviderContent;
+    */
 }
 function workTemplateSingleAPI() {
     let thisAPIContent = contentTemplateAPI;
