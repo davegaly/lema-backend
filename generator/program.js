@@ -72,7 +72,7 @@ workTemplateValues();
 
 function workTemplateSingleProvider() {
     
-    let apiCode = '';
+    let contentProviderFile = '';
     for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
 
         const apiObject = structureCurrentTableObject.api[i];
@@ -82,11 +82,30 @@ function workTemplateSingleProvider() {
         let singleProviderFunctionTemplate = fs.readFileSync(templateProviderFileSingleFunctionPath, 'utf8');
         console.log("Reading single provider function template: OK");
 
+        let contentThisProviderSingleFunction = '';
+        contentThisProviderSingleFunction += singleProviderFunctionTemplate;
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##tableName##", structureCurrentTableObject.tableName);
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##functionName##", apiObject.name);
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsSQL##",  replaceListUpdateFieldsSQL(structureCurrentTableObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsSQL##", replaceListInsertFieldsSQL(structureCurrentTableObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsValues##", replaceListInsertFieldsValues(structureCurrentTableObject));  
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsArray##", replaceListInsertFieldsArray(structureCurrentTableObject)); 
+
+        // adds to the content for this provider file
+        contentProviderFile += contentThisProviderSingleFunction + "\n\n";
+
+        /*
         let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
         let singleAPITemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
         singleAPITemplateContent = replaceKeyWordsSingleAPIContent(singleAPITemplateContent);
         apiCode += "\n\n" + singleAPITemplateContent;
+        */
     }
+    
+    // writes provider file
+    fs.writeFileSync("./db/providers/" + structureCurrentTableObject.tableName + "Provider.js", contentProviderFile);
 
 
     /*

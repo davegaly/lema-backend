@@ -27,7 +27,7 @@
                 },      
                 {
                     "type":"delete", 
-                    "name":"delete"
+                    "name":"deleteLogic"
                 }
             ]     
         },        
@@ -38,9 +38,11 @@
                 {"fieldName":"departmentId", "fieldType":"NUMBER"}
             ],
             "api": [
-                {"type":"classic", "name":"getById"},
-                {"type":"classic", "name":"listAll"},
-                {"type":"classic", "name":"save"}
+                {
+                    "type":"get", 
+                    "name":"getByGuid",
+                    "apiReturnFields": ["guid","name"]
+                }
             ]  
         },
         {
@@ -52,9 +54,7 @@
                 {"fieldName":"phone1", "fieldType":"TEXT"}
             ],
             "api": [
-                {"type":"classic", "name":"getById"},
-                {"type":"classic", "name":"listAll"},
-                {"type":"classic", "name":"save"}
+
             ]  
         }
     ]
