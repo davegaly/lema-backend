@@ -156,7 +156,7 @@ function replaceKeyWordsSingleAPIContent(singleAPITemplateContent) {
 // replace values in templates functions
 function replaceWhereString(apiObject) {
     let result = '';
-    if (apiObject.whereString != undefined && apiObject.whereString != null) {
+    if (apiObject.whereString != undefined && apiObject.whereString != null && apiObject.whereString != '') {
         result += "WHERE " + apiObject.whereString;
     }
     return result;

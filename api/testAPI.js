@@ -9,6 +9,19 @@ const testRouter = new Router({
 
 testRouter.get('/', async (ctx, next) => {
 
+  /*
+  await new Promise((resolve, reject) => {
+    departmentsProvider.save({"id":0, "name":"HD Sintesi"}, function(err,result) {
+      resolve();
+    });    
+  }); 
+  */
+  await new Promise((resolve, reject) => {
+    departmentsProvider.deleteLogic({"id":1}, function(err,result) {
+      resolve();
+    });    
+  }); 
+
   await new Promise((resolve, reject) => {
     departmentsProvider.getByGuid({"guid":"21312"}, function(err,result) {
       resolve();
@@ -16,7 +29,7 @@ testRouter.get('/', async (ctx, next) => {
   }); 
 
   await new Promise((resolve, reject) => {
-    departmentsProvider.listForGrid({}, function(err,result) {
+    departmentsProvider.listAll({}, function(err,result) {
       ctx.body = result;
       resolve();
     });    

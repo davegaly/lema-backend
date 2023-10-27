@@ -28,10 +28,17 @@
                     "whereParams": []                    
                 },
                 {
+                    "type":"list", 
+                    "name":"listAll",
+                    "apiReturnFields": ["id","guid","name","isDeleted"],
+                    "whereString": "",
+                    "whereParams": []                    
+                },                
+                {
                     "type":"save", 
                     "name":"save",
-                    "updateFields": ["name", "dageField"],
-                    "insertFields": ["name", "dageField"]
+                    "updateFields": ["name"],
+                    "insertFields": ["name"]
                 },      
                 {
                     "type":"delete", 

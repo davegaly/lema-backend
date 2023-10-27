@@ -79,6 +79,32 @@ async function listForDropdown(params, callback) {
     });
 }
 
+async function listAll(params, callback) {
+    const db = new sqlite3.Database(filepath, (error) => {
+        if (error) {return console.log(error.message);}
+        db.serialize(() => {
+            let result = [];
+            console.log("departmentsProvider->listAll Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM departments `, [], (error, row) => {
+                if (error) {return console.log(error);}
+                let recordToReturn = 
+				{
+					id: row.id,
+					guid: row.guid,
+					name: row.name,
+					isDeleted: row.isDeleted,
+				}                
+                result.push(recordToReturn);
+            },
+            function() {
+                console.log("departmentsProvider->listAll Finished (callback)");
+                console.log("departmentsProvider->listAll this is the result: " + JSON.stringify(result));
+                callback(null, result);
+            });
+        });
+    });
+}
+
 // save
 async function save(params, callback) {
     console.log("departmentsProvider->save Started: " + JSON.stringify(params));
@@ -87,7 +113,7 @@ async function save(params, callback) {
         if (params.id > 0) {
             db.serialize(() => {
                 console.log("departmentsProvider->save(update) Started");
-                db.prepare(`UPDATE departments SET name=?,dageField=? WHERE id=?`, [params.name,params.dageField,params.id]).run(
+                db.prepare(`UPDATE departments SET name=? WHERE id=?`, [params.name,params.id]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
@@ -105,7 +131,7 @@ async function save(params, callback) {
                 console.log("departmentsProvider->save(insert) Started");
                 const uniqueUUID = uuid.v4();
                 console.log("Generated guid for new record: " + uniqueUUID);
-                db.prepare(`INSERT INTO departments (name,dageField,guid) VALUES (?,?,?)`, [params.name,params.dageField,uniqueUUID]).run(
+                db.prepare(`INSERT INTO departments (name,guid) VALUES (?,?)`, [params.name,uniqueUUID]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
@@ -145,4 +171,4 @@ async function deleteLogic(params, callback) {
 
 
 
-module.exports = { getByGuid,listForGrid,listForDropdown,save,deleteLogic, }
+module.exports = { getByGuid,listForGrid,listForDropdown,listAll,save,deleteLogic, }

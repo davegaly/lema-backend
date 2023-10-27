@@ -1,5 +1,7 @@
 'use strict';
 
+const migrationHelper = require("./helper/migrationHelper");
+
 var dbm;
 var type;
 var seed;
@@ -15,11 +17,16 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('teams', {
-    id: { type: 'int', primaryKey: true, autoIncrement: true },
-    name: 'string',
-    departmentId: 'int'
-  });
+
+  let tableFields = {};
+  tableFields.id = { type: 'int', primaryKey: true, autoIncrement: true };
+  tableFields.name = 'string';
+  tableFields.departmentId = 'int';
+
+  tableFields = migrationHelper.addSystemFields(tableFields);
+
+  return db.createTable('teams', tableFields);
+
 };
 
 exports.down = function(db) {
