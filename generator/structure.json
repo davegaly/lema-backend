@@ -29,7 +29,9 @@
                 },
                 {
                     "type":"save", 
-                    "name":"save"
+                    "name":"save",
+                    "updateFields": ["name", "dageField"],
+                    "insertFields": ["name", "dageField"]
                 },      
                 {
                     "type":"delete", 

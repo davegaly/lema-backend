@@ -49,18 +49,6 @@ function workTemplateValues() {
     })
 }
 workTemplateValues();
-
-
-
-
-// 4.0 - reads templates for API
-//contentTemplateAPI = fs.readFileSync(fileTemplateAPI);
-
-
-
-
-
-
 function workTemplateSingleProvider() {
     
     let contentProviderFile = '';
@@ -80,11 +68,11 @@ function workTemplateSingleProvider() {
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject, apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereString##", replaceWhereString(apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereParams##", replaceWhereParams(apiObject));
-        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsSQL##",  replaceListUpdateFieldsSQL(structureCurrentTableObject));
-        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject));
-        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsSQL##", replaceListInsertFieldsSQL(structureCurrentTableObject));
-        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsValues##", replaceListInsertFieldsValues(structureCurrentTableObject));  
-        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsArray##", replaceListInsertFieldsArray(structureCurrentTableObject)); 
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsSQL##",  replaceListUpdateFieldsSQL(structureCurrentTableObject, apiObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject, apiObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsSQL##", replaceListInsertFieldsSQL(structureCurrentTableObject, apiObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsValues##", replaceListInsertFieldsValues(structureCurrentTableObject, apiObject));  
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsArray##", replaceListInsertFieldsArray(structureCurrentTableObject, apiObject)); 
 
         // adds to the content for this provider file
         contentProviderFile += contentThisProviderSingleFunction + "\n\n";
@@ -93,6 +81,18 @@ function workTemplateSingleProvider() {
     // returns the content that will be included in the skeleton
     return contentProviderFile;
 }
+
+
+
+// 4.0 - reads templates for API
+//contentTemplateAPI = fs.readFileSync(fileTemplateAPI);
+
+
+
+
+
+
+
 function buildExportFunctionsList() {
     // builds the replacement content for module.exports = {} part of the skeleton
     let result = '';
@@ -184,49 +184,59 @@ function replaceFieldsAsObject(tableObject, apiObject) {
     result += '\t\t\t\t}';
     return result;
 }
-function replaceListUpdateFieldsSQL(tableObject) {
+function replaceListUpdateFieldsSQL(tableObject, apiObject) {
     let result = '';
-    Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = tableObject.fields[fieldIndex];
-        result += fieldProperties.fieldName + '=?,';
-    });
+    if (apiObject.updateFields != undefined && apiObject.updateFields != null) {
+        Object.keys(apiObject.updateFields).forEach(fieldIndex => {
+            let apiReturnFieldProperties = apiObject.updateFields[fieldIndex];
+            result += apiReturnFieldProperties + '=?,';
+        });
+    }
     result = result.substring(0, result.length - 1); // removes last ,
     return result;
 }
-function replaceListUpdateFieldsArray(tableObject) {
+function replaceListUpdateFieldsArray(tableObject, apiObject) {
     let result = '[';
-    Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = tableObject.fields[fieldIndex];
-        result += 'params.' + fieldProperties.fieldName + ",";
-    });
+    if (apiObject.updateFields != undefined && apiObject.updateFields != null) {
+        Object.keys(apiObject.updateFields).forEach(fieldIndex => {
+            let apiReturnFieldProperties = apiObject.updateFields[fieldIndex];
+            result += 'params.' + apiReturnFieldProperties + ",";
+        });
+    }
     result += 'params.id';
     result += ']';
     return result;
 }
-function replaceListInsertFieldsSQL(tableObject) {
+function replaceListInsertFieldsSQL(tableObject, apiObject) {
     let result = '';
-    Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = tableObject.fields[fieldIndex];
-        result += fieldProperties.fieldName + ",";
-    });
+    if (apiObject.insertFields != undefined && apiObject.insertFields != null) {
+        Object.keys(apiObject.insertFields).forEach(fieldIndex => {
+            let apiReturnFieldProperties = apiObject.insertFields[fieldIndex];
+            result += apiReturnFieldProperties + ",";
+        });
+    }
     result = result.replace(/,*$/, '');
     return result;
 }
-function replaceListInsertFieldsValues(tableObject) {
+function replaceListInsertFieldsValues(tableObject, apiObject) {
     let result = '';
-    Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = tableObject.fields[fieldIndex];
-        result += '?' + ",";
-    });
+    if (apiObject.insertFields != undefined && apiObject.insertFields != null) {    
+        Object.keys(apiObject.insertFields).forEach(fieldIndex => {
+            let apiReturnFieldProperties = apiObject.insertFields[fieldIndex];
+            result += '?' + ",";
+        });
+    }
     result = result.replace(/,*$/, '');
     return result;
 }
-function replaceListInsertFieldsArray(tableObject) {
+function replaceListInsertFieldsArray(tableObject, apiObject) {
     let result = '';
-    Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = tableObject.fields[fieldIndex];
-        result += 'params.' + fieldProperties.fieldName  + ",";
-    });
+    if (apiObject.insertFields != undefined && apiObject.insertFields != null) {    
+        Object.keys(apiObject.insertFields).forEach(fieldIndex => {
+            let apiReturnFieldProperties = apiObject.insertFields[fieldIndex];
+            result += 'params.' + apiReturnFieldProperties  + ",";
+        });
+    }    
     result = result.replace(/,*$/, '');
     return result;
 }

@@ -61,7 +61,7 @@ async function listForDropdown(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("departmentsProvider->listForDropdown Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM departments `, [], (error, row) => {
+            db.each(`SELECT * FROM departments WHERE isDeleted=0`, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
@@ -79,45 +79,67 @@ async function listForDropdown(params, callback) {
     });
 }
 
-async function save(guid, callback) {
+// save
+async function save(params, callback) {
+    console.log("departmentsProvider->save Started: " + JSON.stringify(params));
     const db = new sqlite3.Database(filepath, (error) => {
-        if (error) {return console.log(error.message);}
-        db.serialize(() => {
-            let result = {};
-            console.log("departmentsProvider->save Started");
-            db.each(`SELECT * FROM departments WHERE guid = ?`, [guid], (error, row) => {
-                if (error) {return console.log(error);}
-                let recordToReturn = 
-				{
-				}                
-                result = recordToReturn;
-            },
-            function() {
-                console.log("departmentsProvider->save Finished (callback)");
-                callback(null, result);
+        if (error) {return console.error(error.message);}
+        if (params.id > 0) {
+            db.serialize(() => {
+                console.log("departmentsProvider->save(update) Started");
+                db.prepare(`UPDATE departments SET name=?,dageField=? WHERE id=?`, [params.name,params.dageField,params.id]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
+                db.close();
+                console.log("departmentsProvider->save(update) Finished");
+                callback(null, "ok");
             });
-        });
+        }
+        else
+        {
+            db.serialize(() => {
+                console.log("departmentsProvider->save(insert) Started");
+                const uniqueUUID = uuid.v4();
+                console.log("Generated guid for new record: " + uniqueUUID);
+                db.prepare(`INSERT INTO departments (name,dageField,guid) VALUES (?,?,?)`, [params.name,params.dageField,uniqueUUID]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
+                db.close();
+                console.log("departmentsProvider->save(insert) Finished");
+                callback(null, "ok");
+            });            
+        }
     });
 }
 
-async function deleteLogic(guid, callback) {
+// logic delete
+async function deleteLogic(params, callback) {
+    console.log("departmentsProvider->deleteLogic Started: " + JSON.stringify(params));
     const db = new sqlite3.Database(filepath, (error) => {
-        if (error) {return console.log(error.message);}
-        db.serialize(() => {
-            let result = {};
-            console.log("departmentsProvider->deleteLogic Started");
-            db.each(`SELECT * FROM departments WHERE guid = ?`, [guid], (error, row) => {
-                if (error) {return console.log(error);}
-                let recordToReturn = 
-				{
-				}                
-                result = recordToReturn;
-            },
-            function() {
-                console.log("departmentsProvider->deleteLogic Finished (callback)");
-                callback(null, result);
+        if (error) {return console.error(error.message);}
+        if (params.id > 0) {
+            db.serialize(() => {
+                console.log("departmentsProvider->deleteLogic(logic delete) Started");
+                db.prepare(`UPDATE departments SET isDeleted=1 WHERE id=?`, [params.id]).run(
+                    err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    }
+                    ).finalize(err => {
+                        if (err != null) { db.close(); console.log(err.message) };
+                    });
+                db.close();
+                console.log("departmentsProvider->deleteLogic(logic delete) Finished");
+                callback(null, "ok");
             });
-        });
+        }
     });
 }
 
