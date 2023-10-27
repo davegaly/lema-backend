@@ -1,10 +1,10 @@
-async function ##functionName##(guid, callback) {
+async function ##functionName##(params, callback) {
     const db = new sqlite3.Database(filepath, (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
-            console.log("##tableName##Provider->##functionName## Started");
-            db.each(`SELECT * FROM ##tableName## ##whereString##`, [guid], (error, row) => {
+            console.log("##tableName##Provider->##functionName## Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM ##tableName## ##whereString##`, [##whereParams##], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 ##FieldsAsObject##                
@@ -12,6 +12,7 @@ async function ##functionName##(guid, callback) {
             },
             function() {
                 console.log("##tableName##Provider->##functionName## Finished (callback)");
+                console.log("##tableName##Provider->##functionName## this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });

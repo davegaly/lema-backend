@@ -8,8 +8,15 @@ const testRouter = new Router({
 
 
 testRouter.get('/', async (ctx, next) => {
+
   await new Promise((resolve, reject) => {
-    departmentsProvider.getByGuid("asdsad", function(err,result) {
+    departmentsProvider.getByGuid({"guid":"21312"}, function(err,result) {
+      resolve();
+    });    
+  }); 
+
+  await new Promise((resolve, reject) => {
+    departmentsProvider.listForGrid({}, function(err,result) {
       ctx.body = result;
       resolve();
     });    

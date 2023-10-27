@@ -7,13 +7,13 @@ const sqlite3 = require("sqlite3").verbose();
 const uuid = require('uuid');
 const filepath = "./db/main.sqlite";
 
-async function getByGuid(guid, callback) {
+async function getByGuid(params, callback) {
     const db = new sqlite3.Database(filepath, (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
-            console.log("departmentsProvider->getByGuid Started");
-            db.each(`SELECT * FROM departments WHERE guid=? AND id IS NOT NULL AND isDeleted=0`, [guid], (error, row) => {
+            console.log("departmentsProvider->getByGuid Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM departments WHERE guid=? AND id IS NOT NULL AND isDeleted=0`, [params.guid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
@@ -24,52 +24,55 @@ async function getByGuid(guid, callback) {
             },
             function() {
                 console.log("departmentsProvider->getByGuid Finished (callback)");
+                console.log("departmentsProvider->getByGuid this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
     });
 }
 
-async function listForGrid(guid, callback) {
+async function listForGrid(params, callback) {
     const db = new sqlite3.Database(filepath, (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
-            let result = {};
-            console.log("departmentsProvider->listForGrid Started");
-            db.each(`SELECT * FROM departments WHERE guid = ?`, [guid], (error, row) => {
+            let result = [];
+            console.log("departmentsProvider->listForGrid Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM departments WHERE isDeleted=0`, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					guid: row.guid,
 					name: row.name,
 				}                
-                result = recordToReturn;
+                result.push(recordToReturn);
             },
             function() {
                 console.log("departmentsProvider->listForGrid Finished (callback)");
+                console.log("departmentsProvider->listForGrid this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
     });
 }
 
-async function listForDropdown(guid, callback) {
+async function listForDropdown(params, callback) {
     const db = new sqlite3.Database(filepath, (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
-            let result = {};
-            console.log("departmentsProvider->listForDropdown Started");
-            db.each(`SELECT * FROM departments WHERE guid = ?`, [guid], (error, row) => {
+            let result = [];
+            console.log("departmentsProvider->listForDropdown Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM departments `, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					guid: row.guid,
 					name: row.name,
 				}                
-                result = recordToReturn;
+                result.push(recordToReturn);
             },
             function() {
                 console.log("departmentsProvider->listForDropdown Finished (callback)");
+                console.log("departmentsProvider->listForDropdown this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
@@ -120,4 +123,4 @@ async function deleteLogic(guid, callback) {
 
 
 
-module.exports = {  }
+module.exports = { getByGuid,listForGrid,listForDropdown,save,deleteLogic, }

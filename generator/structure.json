@@ -23,7 +23,9 @@
                 {
                     "type":"list", 
                     "name":"listForDropdown",
-                    "apiReturnFields": ["guid","name"]
+                    "apiReturnFields": ["guid","name"],
+                    "whereString": "isDeleted=0",
+                    "whereParams": []                    
                 },
                 {
                     "type":"save", 

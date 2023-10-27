@@ -40,6 +40,7 @@ function workTemplateValues() {
 
         // module.exports for the functions
         listAPIsExport = buildExportFunctionsList();
+        console.log("EXPPOOOOOORTTTT" + listAPIsExport);
         contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##listAPIsExport##", listAPIsExport);
         
         // writes provider file
@@ -78,6 +79,7 @@ function workTemplateSingleProvider() {
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##functionName##", apiObject.name);
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject, apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereString##", replaceWhereString(apiObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereParams##", replaceWhereParams(apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsSQL##",  replaceListUpdateFieldsSQL(structureCurrentTableObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsSQL##", replaceListInsertFieldsSQL(structureCurrentTableObject));
@@ -96,6 +98,7 @@ function buildExportFunctionsList() {
     let result = '';
     for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
         const apiObject = structureCurrentTableObject.api[i]; 
+        result += apiObject.name + ",";
     }
     return result;
 }
@@ -155,6 +158,16 @@ function replaceWhereString(apiObject) {
     let result = '';
     if (apiObject.whereString != undefined && apiObject.whereString != null) {
         result += "WHERE " + apiObject.whereString;
+    }
+    return result;
+}
+function replaceWhereParams(apiObject) {
+    let result = '';
+    if (apiObject.whereParams != undefined && apiObject.whereParams != null) {
+        Object.keys(apiObject.whereParams).forEach(fieldIndex => {
+            let apiwhereParam = apiObject.whereParams[fieldIndex];
+            result += apiwhereParam + ",";
+        });
     }
     return result;
 }
