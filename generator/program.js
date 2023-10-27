@@ -8,7 +8,7 @@ let structureObject = {};
 let structureCurrentTableObject = {};
 let fileTemplateProvider = "./generator/templateProvider.txt";
 let fileTemplateAPI = "./generator/templateAPI.txt";
-let contentTemplateProvider = '';
+let contentTemplateSkeletonProvider = '';
 let contentTemplateAPI = '';
 let contentTemplateSingleAPI = '';
 let filesToWrite = [];
@@ -19,7 +19,7 @@ structureObject = JSON.parse(fs.readFileSync(structurePath, 'utf8'));
 console.log("structureObject created succesfully!"); 
 
 // 2.0 - reads templateProvider skeleton
-contentTemplateProvider = fs.readFileSync(fileTemplateProvider, 'utf8');
+contentTemplateSkeletonProvider = fs.readFileSync(fileTemplateProvider, 'utf8');
 console.log("templateProvider skeleton read succesfully!"); 
 
 // 2.1 - creating a provider file for each table in the structure.json
@@ -35,27 +35,17 @@ function workTemplateValues() {
         let thisProviderContent = workTemplateSingleProvider();
         console.log("Finished create provider content")
 
-        /*
-        // provider content for this table
-        let thisProviderContent = workTemplateSingleProvider();
-        let newFileToWriteProvider = {
-            path: './db/providers/' + structureCurrentTableObject.tableName + "Provider.js",
-            content: thisProviderContent
-        }
-        filesToWrite.push(newFileToWriteProvider);
+        // susbstite list of functions
+        contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##listAPIs##", thisProviderContent);
 
-        // api content for this table
-        let thisAPIContent = workTemplateSingleAPI();
-        let newFileToWriteAPI = {
-            path: './api/' + structureCurrentTableObject.tableName + "API.js",
-            content: thisAPIContent
-        }
-        filesToWrite.push(newFileToWriteAPI);
-        */
-
+        // module.exports for the functions
+        listAPIsExport = buildExportFunctionsList();
+        contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##listAPIsExport##", listAPIsExport);
+        
+        // writes provider file
+        fs.writeFileSync("./db/providers/" + structureCurrentTableObject.tableName + "Provider.js", contentTemplateSkeletonProvider);
+        console.log(structureCurrentTableObject.tableName + "Provider.js" + " written");
     })
-
-    //writeTemplateContent();
 }
 workTemplateValues();
 
@@ -86,7 +76,8 @@ function workTemplateSingleProvider() {
         contentThisProviderSingleFunction += singleProviderFunctionTemplate;
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##tableName##", structureCurrentTableObject.tableName);
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##functionName##", apiObject.name);
-        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject, apiObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereString##", replaceWhereString(apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsSQL##",  replaceListUpdateFieldsSQL(structureCurrentTableObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listInsertFieldsSQL##", replaceListInsertFieldsSQL(structureCurrentTableObject));
@@ -95,37 +86,20 @@ function workTemplateSingleProvider() {
 
         // adds to the content for this provider file
         contentProviderFile += contentThisProviderSingleFunction + "\n\n";
-
-        /*
-        let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
-        let singleAPITemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
-        singleAPITemplateContent = replaceKeyWordsSingleAPIContent(singleAPITemplateContent);
-        apiCode += "\n\n" + singleAPITemplateContent;
-        */
     }
     
-    // writes provider file
-    fs.writeFileSync("./db/providers/" + structureCurrentTableObject.tableName + "Provider.js", contentProviderFile);
-
-
-    /*
-    let thisProviderContent = contentTemplateProvider;
-    thisProviderContent = thisProviderContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
-    //##FieldsAsObject##
-    thisProviderContent = thisProviderContent.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject));
-    //####listUpdateFieldsSQL##
-    thisProviderContent = thisProviderContent.replaceAll("##listUpdateFieldsSQL##", replaceListUpdateFieldsSQL(structureCurrentTableObject));
-    //####listUpdateFieldsArray##
-    thisProviderContent = thisProviderContent.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject));
-    //##listInsertFieldsSQL##
-    thisProviderContent = thisProviderContent.replaceAll("##listInsertFieldsSQL##", replaceListInsertFieldsSQL(structureCurrentTableObject));
-    //##listInsertFieldsValues##
-    thisProviderContent = thisProviderContent.replaceAll("##listInsertFieldsValues##", replaceListInsertFieldsValues(structureCurrentTableObject));   
-    //##listInsertFieldsArray##
-    thisProviderContent = thisProviderContent.replaceAll("##listInsertFieldsArray##", replaceListInsertFieldsArray(structureCurrentTableObject));   
-    return thisProviderContent;
-    */
+    // returns the content that will be included in the skeleton
+    return contentProviderFile;
 }
+function buildExportFunctionsList() {
+    // builds the replacement content for module.exports = {} part of the skeleton
+    let result = '';
+    for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
+        const apiObject = structureCurrentTableObject.api[i]; 
+    }
+    return result;
+}
+
 function workTemplateSingleAPI() {
     let thisAPIContent = contentTemplateAPI;
     thisAPIContent = thisAPIContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
@@ -177,14 +151,23 @@ function replaceKeyWordsSingleAPIContent(singleAPITemplateContent) {
 }
 
 // replace values in templates functions
-function replaceFieldsAsObject(tableObject) {
+function replaceWhereString(apiObject) {
+    let result = '';
+    if (apiObject.whereString != undefined && apiObject.whereString != null) {
+        result += "WHERE " + apiObject.whereString;
+    }
+    return result;
+}
+function replaceFieldsAsObject(tableObject, apiObject) {
+    console.log(apiObject);
     let result = '\t\t\t\t{\n';
-    result += "id: row.id,";
-    Object.keys(tableObject.fields).forEach(fieldIndex => {
-        let fieldProperties = tableObject.fields[fieldIndex];
-        result += '\t\t\t\t\t' + fieldProperties.fieldName + ": row." + fieldProperties.fieldName + ",";
-        result += '\n';
-    });
+    if (apiObject.apiReturnFields != undefined && apiObject.apiReturnFields != null) {
+        Object.keys(apiObject.apiReturnFields).forEach(fieldIndex => {
+            let apiReturnFieldProperties = apiObject.apiReturnFields[fieldIndex];
+            result += '\t\t\t\t\t' + apiReturnFieldProperties + ": row." + apiReturnFieldProperties + ",";
+            result += '\n';
+        });
+    }
     result += '\t\t\t\t}';
     return result;
 }

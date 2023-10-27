@@ -9,4 +9,4 @@ const filepath = "./db/main.sqlite";
 
 ##listAPIs##
 
-module.exports = { ##listAPIsExport }
+module.exports = { ##listAPIsExport## }

@@ -9,8 +9,7 @@ const testRouter = new Router({
 
 testRouter.get('/', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    departmentsProvider.save({id:0,name:'HR'}, function(err,result) {
-      if(err!=null) {console.log(err);}
+    departmentsProvider.getByGuid("asdsad", function(err,result) {
       ctx.body = result;
       resolve();
     });    

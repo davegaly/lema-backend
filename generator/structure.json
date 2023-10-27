@@ -9,12 +9,16 @@
                 {
                     "type":"get", 
                     "name":"getByGuid",
-                    "apiReturnFields": ["guid","name"]
+                    "apiReturnFields": ["guid","name"],
+                    "whereString": "guid=? AND id IS NOT NULL AND isDeleted=0",
+                    "whereParams": ["params.guid"]
                 },
                 {
                     "type":"list", 
                     "name":"listForGrid",
-                    "apiReturnFields": ["guid","name"]
+                    "apiReturnFields": ["guid","name"],
+                    "whereString": "isDeleted=0",
+                    "whereParams": []
                 },
                 {
                     "type":"list", 
