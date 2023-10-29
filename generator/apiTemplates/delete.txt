@@ -1,4 +1,4 @@
-// getbyid
+// ##apiName##
 ##tableName##Router.get('/getbyid/:id', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("##tableName##API->save(getbyid), wtih id " + ctx.params.id + " Started");

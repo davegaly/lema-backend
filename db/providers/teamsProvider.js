@@ -131,7 +131,7 @@ async function save(params, callback) {
                 console.log("departmentsProvider->save(insert) Started");
                 const uniqueUUID = uuid.v4();
                 console.log("Generated guid for new record: " + uniqueUUID);
-                db.prepare(`INSERT INTO departments (name,guid) VALUES (?,?)`, [params.name,uniqueUUID]).run(
+                db.prepare(`INSERT INTO departments (name,guid,isDeleted) VALUES (?,?,?)`, [params.name,uniqueUUID,0]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }

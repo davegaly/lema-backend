@@ -7,9 +7,9 @@ let structurePath = "./generator/structure.json";
 let structureObject = {};
 let structureCurrentTableObject = {};
 let fileTemplateProvider = "./generator/templateProvider.txt";
-let fileTemplateAPI = "./generator/templateAPI.txt";
 let contentTemplateSkeletonProvider = '';
-let contentTemplateAPI = '';
+let fileTemplateApi = "./generator/templateAPI.txt";
+
 let contentTemplateSingleAPI = '';
 let filesToWrite = [];
 
@@ -33,20 +33,24 @@ function workTemplateValues() {
 
         console.log("Begin create provider content");
         let thisProviderContent = workTemplateSingleProvider();
-        console.log("Finished create provider content")
+        console.log("Finished create provider content");
 
         // susbstite list of functions
         contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##listAPIs##", thisProviderContent);
+        console.log("Finished skeleton substitution");
 
         // module.exports for the functions
         listAPIsExport = buildExportFunctionsList();
-        console.log("EXPPOOOOOORTTTT" + listAPIsExport);
         contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##listAPIsExport##", listAPIsExport);
+        console.log("Finished modle.export substitution");
         
         // writes provider file
         fs.writeFileSync("./db/providers/" + structureCurrentTableObject.tableName + "Provider.js", contentTemplateSkeletonProvider);
-        console.log(structureCurrentTableObject.tableName + "Provider.js" + " written");
+        console.log(structureCurrentTableObject.tableName + "Provider.js" + " written - Prodiver file DONE!");
+
     })
+
+    console.log("ALL PROVIDERS FILES DONE!");
 }
 workTemplateValues();
 function workTemplateSingleProvider() {
@@ -82,6 +86,60 @@ function workTemplateSingleProvider() {
     return contentProviderFile;
 }
 
+// 3.1 - creating a api file for each table in the structure.json
+function workTemplateForAPI() {
+
+    // iterate tables in the structure
+    Object.keys(structureObject.tables).forEach(tableIndex => {
+        
+        structureCurrentTableObject = structureObject.tables[tableIndex];
+        console.log("Working on api file for table: " + structureCurrentTableObject.tableName);
+
+        let contentTemplateSkeletonAPI = fs.readFileSync(fileTemplateApi, 'utf8');
+        console.log("templateAPI skeleton read succesfully!"); 
+
+        console.log("Begin create api content");
+        contentTemplateSkeletonAPI = workTemplateSingleAPI(contentTemplateSkeletonAPI);
+        console.log("Finished create api content");
+
+        // common substitutions
+        contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##tableName##", structureCurrentTableObject.tableName);
+        
+        // writes api file
+        fs.writeFileSync("./api/" + structureCurrentTableObject.tableName + "API.js", contentTemplateSkeletonAPI);
+        console.log(structureCurrentTableObject.tableName + "API.js" + " written - API file DONE!");
+
+    })
+
+    console.log("ALL API FILES DONE!");
+}
+workTemplateForAPI();
+function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
+    
+    let singleApiCode = '';
+    for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
+        const apiObject = structureCurrentTableObject.api[i];
+        let templateAPIFile = './generator/apiTemplates/' + apiObject.type  + '.txt';
+        let singleApiSpecificTemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
+
+        singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##apiName##", apiObject.name);
+
+        singleApiCode += "\n\n" + singleApiSpecificTemplateContent;
+    }
+    contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##apiContent##", singleApiCode);
+ 
+    return contentTemplateSkeletonAPI;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 // 4.0 - reads templates for API
@@ -103,22 +161,7 @@ function buildExportFunctionsList() {
     return result;
 }
 
-function workTemplateSingleAPI() {
-    let thisAPIContent = contentTemplateAPI;
-    thisAPIContent = thisAPIContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
 
-    let apiCode = '';
-    for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
-        const apiObject = structureCurrentTableObject.api[i];
-        let templateAPIFile = './generator/apiTemplates/' + apiObject.name  + '.txt';
-        let singleAPITemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
-        singleAPITemplateContent = replaceKeyWordsSingleAPIContent(singleAPITemplateContent);
-        apiCode += "\n\n" + singleAPITemplateContent;
-    }
-    thisAPIContent = thisAPIContent.replaceAll("##apiContent##", apiCode);
-
-    return thisAPIContent;
-}
 
 // writes the result
 function writeTemplateContent() {
