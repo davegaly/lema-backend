@@ -59,7 +59,7 @@ departmentsRouter.get('/listAll', async (ctx, next) => {
 // save
 departmentsRouter.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    let params = {##listParamsBodySave##};
+    let params = {id: ctx.request.id, name: ctx.request.body.name};
     console.log("departmentsAPI->save(" + params + ") Started");
     departmentsProvider.save(params, function(err,result) {
       ctx.body = result;
@@ -70,10 +70,10 @@ departmentsRouter.post('/save', async (ctx, next) => {
 });
 
 // deleteLogic
-departmentsRouter.get('/getbyid/:id', async (ctx, next) => {
+departmentsRouter.get('/deleteLogic', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    console.log("departmentsAPI->save(getbyid), wtih id " + ctx.params.id + " Started");
-    departmentsProvider.getById(ctx.params.id, function(err,result) {
+    console.log("departmentsAPI->deleteLogic(deleteLogic), wtih id " + ctx.params.id + " Started");
+    departmentsProvider.deleteLogic(ctx.params.id, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->save(getbyid) finished");
       resolve();

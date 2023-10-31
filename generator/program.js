@@ -127,6 +127,14 @@ function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
         singleApiCode += "\n\n" + singleApiSpecificTemplateContent;
     }
     contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##apiContent##", singleApiCode);
+
+    let fieldsParamsBodySave = '';
+    fieldsParamsBodySave = 'id: ctx.request.id'
+    Object.keys(structureCurrentTableObject.fields).forEach(fieldIndex => {
+        let fieldProperties = structureCurrentTableObject.fields[fieldIndex];
+        fieldsParamsBodySave += ', ' + fieldProperties.fieldName + ": ctx.request.body." + fieldProperties.fieldName;
+    });
+    contentTemplateSkeletonAPI =  contentTemplateSkeletonAPI.replaceAll("##listParamsBodySave##", fieldsParamsBodySave); 
  
     return contentTemplateSkeletonAPI;
 }

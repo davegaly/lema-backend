@@ -9,6 +9,7 @@
                 {
                     "type":"get", 
                     "name":"getByGuid",
+                    "extendedUrl": "/:guid",
                     "apiReturnFields": ["guid","name"],
                     "whereString": "guid=? AND id IS NOT NULL AND isDeleted=0",
                     "whereParams": ["params.guid"]
@@ -42,7 +43,8 @@
                 },      
                 {
                     "type":"delete", 
-                    "name":"deleteLogic"
+                    "name":"deleteLogic",
+                    "extendedUrl": "/:guid"
                 }
             ]     
         },        
