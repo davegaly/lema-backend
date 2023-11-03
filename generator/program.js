@@ -104,6 +104,7 @@ function workTemplateForAPI() {
 
         // common substitutions
         contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##tableName##", structureCurrentTableObject.tableName);
+
         
         // writes api file
         fs.writeFileSync("./api/" + structureCurrentTableObject.tableName + "API.js", contentTemplateSkeletonAPI);
@@ -123,6 +124,9 @@ function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
         let singleApiSpecificTemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
 
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##apiName##", apiObject.name);
+        singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##extendedUrl##", apiObject.extendedUrl);
+        singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##dbProviderMethodName##", apiObject.dbProviderMethodName);
+        
 
         singleApiCode += "\n\n" + singleApiSpecificTemplateContent;
     }

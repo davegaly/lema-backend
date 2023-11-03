@@ -9,10 +9,10 @@ const departmentsRouter = new Router({
 
 
 // getByGuid
-departmentsRouter.get('/getByGuid', async (ctx, next) => {
+departmentsRouter.get('/getByGuid/:guid', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    console.log("departmentsAPI->getByGuid, wtih id " + ctx.params.id + " Started");
-    departmentsProvider.getById(ctx.params.id, function(err,result) {
+    console.log("departmentsAPI->getByGuid, with params " + JSON.stringify(ctx.params) + " Started");
+    departmentsProvider.getByGuid(ctx.params.id, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->getByGuid finished");
       resolve();
@@ -24,7 +24,7 @@ departmentsRouter.get('/getByGuid', async (ctx, next) => {
 departmentsRouter.get('/listForGrid', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("departmentsAPI->listForGrid Started");
-    departmentsProvider.listAll(function(err,result) {
+    departmentsProvider.listForGrid(null, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->listForGrid finished");
       resolve();
@@ -36,7 +36,7 @@ departmentsRouter.get('/listForGrid', async (ctx, next) => {
 departmentsRouter.get('/listForDropdown', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("departmentsAPI->listForDropdown Started");
-    departmentsProvider.listAll(function(err,result) {
+    departmentsProvider.listForDropdown(null, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->listForDropdown finished");
       resolve();
@@ -48,7 +48,7 @@ departmentsRouter.get('/listForDropdown', async (ctx, next) => {
 departmentsRouter.get('/listAll', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("departmentsAPI->listAll Started");
-    departmentsProvider.listAll(function(err,result) {
+    departmentsProvider.listAll(null, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->listAll finished");
       resolve();
@@ -60,7 +60,7 @@ departmentsRouter.get('/listAll', async (ctx, next) => {
 departmentsRouter.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     let params = {id: ctx.request.id, name: ctx.request.body.name};
-    console.log("departmentsAPI->save(" + params + ") Started");
+    console.log("departmentsAPI->save(" + JSON.stringify(params) + ") Started");
     departmentsProvider.save(params, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->save finished");
@@ -70,9 +70,9 @@ departmentsRouter.post('/save', async (ctx, next) => {
 });
 
 // deleteLogic
-departmentsRouter.get('/deleteLogic', async (ctx, next) => {
+departmentsRouter.get('/deleteLogic/:guid', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    console.log("departmentsAPI->deleteLogic(deleteLogic), wtih id " + ctx.params.id + " Started");
+    console.log("departmentsAPI->deleteLogic(deleteLogic), wtih params " + JSON.stringify(ctx.params) + " Started");
     departmentsProvider.deleteLogic(ctx.params.id, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->save(getbyid) finished");

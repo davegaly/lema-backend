@@ -24,11 +24,11 @@ const dateTest = (ctx) => {
 //router.get('/', helloWorld);
 //router.get('/davetesta', dateTest);
 
-//let departmentsAPI = require('./api/departmentsAPI.js');
+let departmentsAPI = require('./api/departmentsAPI.js');
 let testAPI = require('./api/testAPI.js');
 
 //app.use(router.routes());
-//app.use(departmentsAPI.routes());
+app.use(departmentsAPI.routes());
 app.use(testAPI.routes());
 
 

@@ -6,9 +6,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const uuid = require('uuid');
 const filepath = "./db/main.sqlite";
+const sharedDBMethods = require('../../db/sharedDBFunctions.js');
 
 async function getByGuid(params, callback) {
-    const db = new sqlite3.Database(filepath, (error) => {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
@@ -32,7 +33,7 @@ async function getByGuid(params, callback) {
 }
 
 async function listForGrid(params, callback) {
-    const db = new sqlite3.Database(filepath, (error) => {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = [];
@@ -56,7 +57,7 @@ async function listForGrid(params, callback) {
 }
 
 async function listForDropdown(params, callback) {
-    const db = new sqlite3.Database(filepath, (error) => {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = [];
@@ -80,7 +81,7 @@ async function listForDropdown(params, callback) {
 }
 
 async function listAll(params, callback) {
-    const db = new sqlite3.Database(filepath, (error) => {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = [];
@@ -108,7 +109,7 @@ async function listAll(params, callback) {
 // save
 async function save(params, callback) {
     console.log("departmentsProvider->save Started: " + JSON.stringify(params));
-    const db = new sqlite3.Database(filepath, (error) => {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
@@ -149,7 +150,7 @@ async function save(params, callback) {
 // logic delete
 async function deleteLogic(params, callback) {
     console.log("departmentsProvider->deleteLogic Started: " + JSON.stringify(params));
-    const db = new sqlite3.Database(filepath, (error) => {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {

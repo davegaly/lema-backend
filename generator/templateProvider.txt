@@ -6,6 +6,7 @@
 const sqlite3 = require("sqlite3").verbose();
 const uuid = require('uuid');
 const filepath = "./db/main.sqlite";
+const sharedDBMethods = require('../../db/sharedDBFunctions.js');
 
 ##listAPIs##
 

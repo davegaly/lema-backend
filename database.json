@@ -3,7 +3,7 @@
 
     "dev": {
       "driver": "sqlite3",
-      "filename": "./db/main.sqlite"
+      "filename": "./db/dev.sqlite"
     },
   
     "test": {

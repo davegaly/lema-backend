@@ -9,13 +9,13 @@ const testRouter = new Router({
 
 testRouter.get('/', async (ctx, next) => {
 
-  /*
+  
   await new Promise((resolve, reject) => {
     departmentsProvider.save({"id":0, "name":"HD Sintesi"}, function(err,result) {
       resolve();
     });    
   }); 
-  */
+  
   await new Promise((resolve, reject) => {
     departmentsProvider.deleteLogic({"id":1}, function(err,result) {
       resolve();

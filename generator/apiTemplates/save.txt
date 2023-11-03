@@ -2,8 +2,8 @@
 ##tableName##Router.post('/save', async (ctx, next) => {
   await new Promise((resolve, reject) => {
     let params = {##listParamsBodySave##};
-    console.log("##tableName##API->save(" + params + ") Started");
-    ##tableName##Provider.save(params, function(err,result) {
+    console.log("##tableName##API->save(" + JSON.stringify(params) + ") Started");
+    ##tableName##Provider.##dbProviderMethodName##(params, function(err,result) {
       ctx.body = result;
       console.log("##tableName##API->save finished");
       resolve();

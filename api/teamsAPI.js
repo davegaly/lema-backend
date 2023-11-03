@@ -9,10 +9,10 @@ const teamsRouter = new Router({
 
 
 // getByGuid
-teamsRouter.get('/getByGuid', async (ctx, next) => {
+teamsRouter.get('/getByGuidundefined', async (ctx, next) => {
   await new Promise((resolve, reject) => {
-    console.log("teamsAPI->getByGuid, wtih id " + ctx.params.id + " Started");
-    teamsProvider.getById(ctx.params.id, function(err,result) {
+    console.log("teamsAPI->getByGuid, with params " + JSON.stringify(ctx.params) + " Started");
+    teamsProvider.undefined(ctx.params.id, function(err,result) {
       ctx.body = result;
       console.log("teamsAPI->getByGuid finished");
       resolve();

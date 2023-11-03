@@ -11,6 +11,7 @@
                     "name":"getByGuid",
                     "extendedUrl": "/:guid",
                     "apiReturnFields": ["guid","name"],
+                    "dbProviderMethodName":"getByGuid",
                     "whereString": "guid=? AND id IS NOT NULL AND isDeleted=0",
                     "whereParams": ["params.guid"]
                 },
@@ -18,6 +19,7 @@
                     "type":"list", 
                     "name":"listForGrid",
                     "apiReturnFields": ["guid","name"],
+                    "dbProviderMethodName":"listForGrid",
                     "whereString": "isDeleted=0",
                     "whereParams": []
                 },
@@ -25,6 +27,7 @@
                     "type":"list", 
                     "name":"listForDropdown",
                     "apiReturnFields": ["guid","name"],
+                    "dbProviderMethodName":"listForDropdown",
                     "whereString": "isDeleted=0",
                     "whereParams": []                    
                 },
@@ -32,18 +35,21 @@
                     "type":"list", 
                     "name":"listAll",
                     "apiReturnFields": ["id","guid","name","isDeleted"],
+                    "dbProviderMethodName":"listAll",
                     "whereString": "",
                     "whereParams": []                    
                 },                
                 {
                     "type":"save", 
                     "name":"save",
+                    "dbProviderMethodName":"save",
                     "updateFields": ["name"],
                     "insertFields": ["name"]
                 },      
                 {
                     "type":"delete", 
                     "name":"deleteLogic",
+                    "dbProviderMethodName":"deleteLogic",
                     "extendedUrl": "/:guid"
                 }
             ]     
