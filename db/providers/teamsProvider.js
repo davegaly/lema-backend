@@ -20,7 +20,6 @@ async function getByGuid(params, callback) {
 				{
 					guid: row.guid,
 					name: row.name,
-					departmentId: row.departmentId,
 					departmentName: row.departmentName,
 				}                
                 result = recordToReturn;
@@ -96,7 +95,6 @@ async function listAll(params, callback) {
 					id: row.id,
 					guid: row.guid,
 					name: row.name,
-					departmentId: row.departmentId,
 					departmentName: row.departmentName,
 					isDeleted: row.isDeleted,
 				}                

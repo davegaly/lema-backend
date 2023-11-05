@@ -69,7 +69,7 @@
                     "type":"get", 
                     "name":"getByGuid",
                     "extendedUrl": "/:guid",
-                    "apiReturnFields": ["guid","name","departmentId", "departmentName"],
+                    "apiReturnFields": ["guid","name", "departmentName"],
                     "dbProviderMethodName":"getByGuid",
                     "whereString": "teams.guid=? AND teams.isDeleted=0",
                     "whereParams": ["params.guid"]
@@ -93,7 +93,7 @@
                 {
                     "type":"list", 
                     "name":"listAll",
-                    "apiReturnFields": ["id","guid","name","departmentId","departmentName","isDeleted"],
+                    "apiReturnFields": ["id","guid","name","departmentName","isDeleted"],
                     "dbProviderMethodName":"listAll",
                     "whereString": "",
                     "whereParams": []                    
