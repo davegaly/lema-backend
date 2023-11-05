@@ -152,6 +152,40 @@
                     "extendedUrl": "/:guid"
                 }
             ]
+        },
+        {
+            "tableName":"employeesTeams",
+            "fields":[
+                {"fieldName":"employeeId", "fieldType":"NUMBER"},
+                {"fieldName":"teamId", "fieldType":"NUMBER"}
+            ],
+            "selectFields":"*",
+            "selectFrom":"employeesTeams",
+            "api": [         
+                {
+                    "type":"list", 
+                    "name":"listTeamsForEmployee",
+                    "apiReturnFields": ["teamId"],
+                    "dbProviderMethodName":"listTeamsForEmployee",
+                    "whereString": "employeeId=?",
+                    "whereParams": ["params.employeeId"]                    
+                },
+                {
+                    "type":"list", 
+                    "name":"listEmployeesForTeam",
+                    "apiReturnFields": ["employeeId"],
+                    "dbProviderMethodName":"listEmployeesForTeam",
+                    "whereString": "teamId=?",
+                    "whereParams": ["params.teamId"]                    
+                },                
+                {
+                    "type":"save", 
+                    "name":"save",
+                    "dbProviderMethodName":"save",
+                    "updateFields": ["employeeId","teamId"],
+                    "insertFields": ["employeeId","teamId"]
+                }
+            ]
         }
     ]
 }
