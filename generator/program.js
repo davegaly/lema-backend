@@ -18,16 +18,16 @@ let filesToWrite = [];
 structureObject = JSON.parse(fs.readFileSync(structurePath, 'utf8'));
 console.log("structureObject created succesfully!"); 
 
-// 2.0 - reads templateProvider skeleton
-contentTemplateSkeletonProvider = fs.readFileSync(fileTemplateProvider, 'utf8');
-console.log("templateProvider skeleton read succesfully!"); 
-
-// 2.1 - creating a provider file for each table in the structure.json
+// 2.0 - creating a provider file for each table in the structure.json
 function workTemplateValues() {
 
     // iterate tables in the structure
     Object.keys(structureObject.tables).forEach(tableIndex => {
-        
+
+        // 2.0 - reads templateProvider skeleton
+        contentTemplateSkeletonProvider = fs.readFileSync(fileTemplateProvider, 'utf8');
+        console.log("templateProvider skeleton read succesfully!"); 
+            
         structureCurrentTableObject = structureObject.tables[tableIndex];
         console.log("Working on provider file for table: " + structureCurrentTableObject.tableName);
 
@@ -66,6 +66,7 @@ function workTemplateSingleProvider() {
         console.log("Reading single provider function template: OK");
 
         let contentThisProviderSingleFunction = '';
+        console.log("THIS IS THE TABLE NAME: " +  structureCurrentTableObject.tableName);
         contentThisProviderSingleFunction += singleProviderFunctionTemplate;
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##tableName##", structureCurrentTableObject.tableName);
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##functionName##", apiObject.name);

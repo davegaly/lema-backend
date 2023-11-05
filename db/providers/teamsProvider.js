@@ -13,19 +13,20 @@ async function getByGuid(params, callback) {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = {};
-            console.log("departmentsProvider->getByGuid Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM departments WHERE guid=? AND id IS NOT NULL AND isDeleted=0`, [params.guid,], (error, row) => {
+            console.log("teamsProvider->getByGuid Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM teams WHERE guid=? AND id IS NOT NULL AND isDeleted=0`, [params.guid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					guid: row.guid,
 					name: row.name,
+					departmentId: row.departmentId,
 				}                
                 result = recordToReturn;
             },
             function() {
-                console.log("departmentsProvider->getByGuid Finished (callback)");
-                console.log("departmentsProvider->getByGuid this is the result: " + JSON.stringify(result));
+                console.log("teamsProvider->getByGuid Finished (callback)");
+                console.log("teamsProvider->getByGuid this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
@@ -37,19 +38,20 @@ async function listForGrid(params, callback) {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = [];
-            console.log("departmentsProvider->listForGrid Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM departments WHERE isDeleted=0`, [], (error, row) => {
+            console.log("teamsProvider->listForGrid Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM teams WHERE isDeleted=0`, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					guid: row.guid,
 					name: row.name,
+					departmentId: row.departmentId,
 				}                
                 result.push(recordToReturn);
             },
             function() {
-                console.log("departmentsProvider->listForGrid Finished (callback)");
-                console.log("departmentsProvider->listForGrid this is the result: " + JSON.stringify(result));
+                console.log("teamsProvider->listForGrid Finished (callback)");
+                console.log("teamsProvider->listForGrid this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
@@ -61,8 +63,8 @@ async function listForDropdown(params, callback) {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = [];
-            console.log("departmentsProvider->listForDropdown Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM departments WHERE isDeleted=0`, [], (error, row) => {
+            console.log("teamsProvider->listForDropdown Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM teams WHERE isDeleted=0`, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
@@ -72,8 +74,8 @@ async function listForDropdown(params, callback) {
                 result.push(recordToReturn);
             },
             function() {
-                console.log("departmentsProvider->listForDropdown Finished (callback)");
-                console.log("departmentsProvider->listForDropdown this is the result: " + JSON.stringify(result));
+                console.log("teamsProvider->listForDropdown Finished (callback)");
+                console.log("teamsProvider->listForDropdown this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
@@ -85,21 +87,24 @@ async function listAll(params, callback) {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = [];
-            console.log("departmentsProvider->listAll Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM departments `, [], (error, row) => {
+            console.log("teamsProvider->listAll Started with params: " + JSON.stringify(params));
+            db.each(`SELECT teams.*, departments.name as departmentName FROM teams INNER JOIN departments ON teams.departmentId = departments.id `, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					id: row.id,
 					guid: row.guid,
 					name: row.name,
+					departmentId: row.departmentId,
+                    departmentName: row.departmentName,
 					isDeleted: row.isDeleted,
 				}                
+                console.log(JSON.stringify(recordToReturn));
                 result.push(recordToReturn);
             },
             function() {
-                console.log("departmentsProvider->listAll Finished (callback)");
-                console.log("departmentsProvider->listAll this is the result: " + JSON.stringify(result));
+                console.log("teamsProvider->listAll Finished (callback)");
+                console.log("teamsProvider->listAll this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
@@ -108,13 +113,13 @@ async function listAll(params, callback) {
 
 // save
 async function save(params, callback) {
-    console.log("departmentsProvider->save Started: " + JSON.stringify(params));
+    console.log("teamsProvider->save Started: " + JSON.stringify(params));
     const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
-                console.log("departmentsProvider->save(update) Started");
-                db.prepare(`UPDATE departments SET name=? WHERE id=?`, [params.name,params.id]).run(
+                console.log("teamsProvider->save(update) Started");
+                db.prepare(`UPDATE teams SET name=?,departmentId=? WHERE id=?`, [params.name,params.departmentId,params.id]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
@@ -122,17 +127,17 @@ async function save(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
-                console.log("departmentsProvider->save(update) Finished");
+                console.log("teamsProvider->save(update) Finished");
                 callback(null, "ok");
             });
         }
         else
         {
             db.serialize(() => {
-                console.log("departmentsProvider->save(insert) Started");
+                console.log("teamsProvider->save(insert) Started");
                 const uniqueUUID = uuid.v4();
                 console.log("Generated guid for new record: " + uniqueUUID);
-                db.prepare(`INSERT INTO departments (name,guid,isDeleted) VALUES (?,?,?)`, [params.name,uniqueUUID,0]).run(
+                db.prepare(`INSERT INTO teams (name,departmentId,guid,isDeleted) VALUES (?,?,?,?)`, [params.name,params.departmentId,uniqueUUID,0]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
@@ -140,7 +145,7 @@ async function save(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
-                console.log("departmentsProvider->save(insert) Finished");
+                console.log("teamsProvider->save(insert) Finished");
                 callback(null, "ok");
             });            
         }
@@ -149,13 +154,13 @@ async function save(params, callback) {
 
 // logic delete
 async function deleteLogic(params, callback) {
-    console.log("departmentsProvider->deleteLogic Started: " + JSON.stringify(params));
+    console.log("teamsProvider->deleteLogic Started: " + JSON.stringify(params));
     const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.error(error.message);}
         if (params.id > 0) {
             db.serialize(() => {
-                console.log("departmentsProvider->deleteLogic(logic delete) Started");
-                db.prepare(`UPDATE departments SET isDeleted=1 WHERE id=?`, [params.id]).run(
+                console.log("teamsProvider->deleteLogic(logic delete) Started");
+                db.prepare(`UPDATE teams SET isDeleted=1 WHERE id=?`, [params.id]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
@@ -163,7 +168,7 @@ async function deleteLogic(params, callback) {
                         if (err != null) { db.close(); console.log(err.message) };
                     });
                 db.close();
-                console.log("departmentsProvider->deleteLogic(logic delete) Finished");
+                console.log("teamsProvider->deleteLogic(logic delete) Finished");
                 callback(null, "ok");
             });
         }
