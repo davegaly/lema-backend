@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const departmentsProvider = require('../db/providers/departmentsProvider.js');
 const teamsProvider = require('../db/providers/teamsProvider.js');
+const employeesProvider = require('../db/providers/employeesProvider.js');
 
 // Prefix all routes with: /items
 const testRouter = new Router({
@@ -47,6 +48,23 @@ testRouter.get('/teams', async (ctx, next) => {
   
   await new Promise((resolve, reject) => {
     teamsProvider.listAll({}, function(err,result) {
+      ctx.body = result;
+      resolve();
+    });    
+  }); 
+});
+
+
+testRouter.get('/employees', async (ctx, next) => {
+  
+  await new Promise((resolve, reject) => {
+    employeesProvider.save({"id":0, "email":"davegaly@sfsdf.it"}, function(err,result) {
+      resolve();
+    });    
+  }); 
+  
+  await new Promise((resolve, reject) => {
+    employeesProvider.listAll({}, function(err,result) {
       ctx.body = result;
       resolve();
     });    

@@ -14,13 +14,14 @@ async function getByGuid(params, callback) {
         db.serialize(() => {
             let result = {};
             console.log("teamsProvider->getByGuid Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM teams WHERE guid=? AND id IS NOT NULL AND isDeleted=0`, [params.guid,], (error, row) => {
+            db.each(`SELECT teams.*, departments.name as departmentName FROM teams INNER JOIN departments ON teams.departmentId = departments.id WHERE teams.guid=? AND teams.isDeleted=0`, [params.guid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					guid: row.guid,
 					name: row.name,
 					departmentId: row.departmentId,
+					departmentName: row.departmentName,
 				}                
                 result = recordToReturn;
             },
@@ -39,13 +40,13 @@ async function listForGrid(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("teamsProvider->listForGrid Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM teams WHERE isDeleted=0`, [], (error, row) => {
+            db.each(`SELECT teams.*, departments.name as departmentName FROM teams INNER JOIN departments ON teams.departmentId = departments.id WHERE teams.guid=? AND teams.isDeleted=0`, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					guid: row.guid,
 					name: row.name,
-					departmentId: row.departmentId,
+					departmentName: row.departmentName,
 				}                
                 result.push(recordToReturn);
             },
@@ -64,7 +65,7 @@ async function listForDropdown(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("teamsProvider->listForDropdown Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM teams WHERE isDeleted=0`, [], (error, row) => {
+            db.each(`SELECT teams.*, departments.name as departmentName FROM teams INNER JOIN departments ON teams.departmentId = departments.id WHERE teams.isDeleted=0`, [], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
@@ -96,10 +97,9 @@ async function listAll(params, callback) {
 					guid: row.guid,
 					name: row.name,
 					departmentId: row.departmentId,
-                    departmentName: row.departmentName,
+					departmentName: row.departmentName,
 					isDeleted: row.isDeleted,
 				}                
-                console.log(JSON.stringify(recordToReturn));
                 result.push(recordToReturn);
             },
             function() {

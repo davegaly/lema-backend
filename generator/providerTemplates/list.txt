@@ -4,7 +4,7 @@ async function ##functionName##(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("##tableName##Provider->##functionName## Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM ##tableName## ##whereString##`, [##whereParams##], (error, row) => {
+            db.each(`SELECT ##selectFields## FROM ##selectFrom## ##whereString##`, [##whereParams##], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 ##FieldsAsObject##                

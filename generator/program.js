@@ -72,6 +72,8 @@ function workTemplateSingleProvider() {
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##functionName##", apiObject.name);
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##FieldsAsObject##", replaceFieldsAsObject(structureCurrentTableObject, apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereString##", replaceWhereString(apiObject));
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##selectFields##", structureCurrentTableObject.selectFields);
+        contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##selectFrom##", structureCurrentTableObject.selectFrom);
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##whereParams##", replaceWhereParams(apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsSQL##",  replaceListUpdateFieldsSQL(structureCurrentTableObject, apiObject));
         contentThisProviderSingleFunction = contentThisProviderSingleFunction.replaceAll("##listUpdateFieldsArray##", replaceListUpdateFieldsArray(structureCurrentTableObject, apiObject));

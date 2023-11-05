@@ -5,6 +5,8 @@
             "fields":[
                 {"fieldName":"name", "fieldType":"TEXT"}
             ],
+            "selectFields":"*",
+            "selectFrom":"departments",
             "api": [
                 {
                     "type":"get", 
@@ -60,22 +62,24 @@
                 {"fieldName":"name", "fieldType":"TEXT"},
                 {"fieldName":"departmentId", "fieldType":"NUMBER"}
             ],
+            "selectFields":"teams.*, departments.name as departmentName",
+            "selectFrom":"teams INNER JOIN departments ON teams.departmentId = departments.id",
             "api": [
                 {
                     "type":"get", 
                     "name":"getByGuid",
                     "extendedUrl": "/:guid",
-                    "apiReturnFields": ["guid","name","departmentId"],
+                    "apiReturnFields": ["guid","name","departmentId", "departmentName"],
                     "dbProviderMethodName":"getByGuid",
-                    "whereString": "guid=? AND id IS NOT NULL AND isDeleted=0",
+                    "whereString": "teams.guid=? AND teams.isDeleted=0",
                     "whereParams": ["params.guid"]
                 },
                 {
                     "type":"list", 
                     "name":"listForGrid",
-                    "apiReturnFields": ["guid","name","departmentId"],
+                    "apiReturnFields": ["guid","name","departmentName"],
                     "dbProviderMethodName":"listForGrid",
-                    "whereString": "isDeleted=0",
+                    "whereString": "teams.guid=? AND teams.isDeleted=0",
                     "whereParams": []
                 },
                 {
@@ -83,13 +87,13 @@
                     "name":"listForDropdown",
                     "apiReturnFields": ["guid","name"],
                     "dbProviderMethodName":"listForDropdown",
-                    "whereString": "isDeleted=0",
+                    "whereString": "teams.isDeleted=0",
                     "whereParams": []                    
                 },
                 {
                     "type":"list", 
                     "name":"listAll",
-                    "apiReturnFields": ["id","guid","name","departmentId","isDeleted"],
+                    "apiReturnFields": ["id","guid","name","departmentId","departmentName","isDeleted"],
                     "dbProviderMethodName":"listAll",
                     "whereString": "",
                     "whereParams": []                    
@@ -108,6 +112,46 @@
                     "extendedUrl": "/:guid"
                 }
             ]     
+        },
+        {
+            "tableName":"employees",
+            "fields":[
+                {"fieldName":"email", "fieldType":"TEXT"}
+            ],
+            "selectFields":"*",
+            "selectFrom":"employees",
+            "api": [
+                {
+                    "type":"get", 
+                    "name":"getByGuid",
+                    "extendedUrl": "/:guid",
+                    "apiReturnFields": ["guid","email"],
+                    "dbProviderMethodName":"getByGuid",
+                    "whereString": "guid=? AND isDeleted=0",
+                    "whereParams": ["params.guid"]
+                },            
+                {
+                    "type":"list", 
+                    "name":"listAll",
+                    "apiReturnFields": ["id","guid","email","isDeleted"],
+                    "dbProviderMethodName":"listAll",
+                    "whereString": "",
+                    "whereParams": []                    
+                },      
+                {
+                    "type":"save", 
+                    "name":"save",
+                    "dbProviderMethodName":"save",
+                    "updateFields": ["email"],
+                    "insertFields": ["email"]
+                },      
+                {
+                    "type":"delete", 
+                    "name":"deleteLogic",
+                    "dbProviderMethodName":"deleteLogic",
+                    "extendedUrl": "/:guid"
+                }
+            ]
         }
     ]
 }
