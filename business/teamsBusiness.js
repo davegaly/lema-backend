@@ -2,7 +2,7 @@ const departmentsProvider = require('../db/providers/departmentsProvider.js');
 
 // SAVE API -----------------------------------------------------------------------------------------------------------------------------
 
-function saveAdjustInputCtx(ctx) {
+async function saveAdjustInputCtx(ctx) {
     // gui is passing department guid, we need its id
     let inputParamGuid = ctx.request.body.departmentGuid;
     let departmentId = 0;
