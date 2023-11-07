@@ -1,0 +1,13 @@
+fetch("https://lemabackend-cety--3000--5a198b5c.local-corp.webcontainer.io/api/test/teams", {
+  method: "POST",
+  headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "id": "0",
+      "name": "Teams Davide",
+      "departmentGuid": "abcde"
+    })
+  }
+).then(r=>console.log(r))

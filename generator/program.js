@@ -43,6 +43,9 @@ function workTemplateValues() {
         listAPIsExport = buildExportFunctionsList();
         contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##listAPIsExport##", listAPIsExport);
         console.log("Finished modle.export substitution");
+
+        // generics
+        contentTemplateSkeletonProvider = contentTemplateSkeletonProvider.replaceAll("##tableName##", structureCurrentTableObject.tableName);
         
         // writes provider file
         fs.writeFileSync("./db/providers/" + structureCurrentTableObject.tableName + "Provider.js", contentTemplateSkeletonProvider);
@@ -108,6 +111,19 @@ function workTemplateForAPI() {
         // common substitutions
         contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##tableName##", structureCurrentTableObject.tableName);
 
+        // requires
+        /*
+        let contentForRequirePlaceholder = '';
+        if (structureCurrentTableObject.apiRequires != null) {
+            for (let i = 0; i < structureCurrentTableObject.apiRequires.length; i++) {
+                const requireElement = structureCurrentTableObject.apiRequires[i];
+                let thisRequireContent = "const " + requireElement.variableName + " = require('" + requireElement.requirePath + "');";
+                //const teamsBusiness = require('../business/teamsBusiness.js');
+                contentForRequirePlaceholder += thisRequireContent + "\n";
+            }
+        }
+        contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##requires##", contentForRequirePlaceholder);
+        */
         
         // writes api file
         fs.writeFileSync("./api/" + structureCurrentTableObject.tableName + "API.js", contentTemplateSkeletonAPI);
@@ -129,14 +145,22 @@ function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##apiName##", apiObject.name);
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##extendedUrl##", apiObject.extendedUrl);
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##dbProviderMethodName##", apiObject.dbProviderMethodName);
-        
 
+        /*
+        // functions
+        if (apiObject.functionsInitTransformCtx == null) {
+            singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##functionsInitTransformCtx##", '');
+        } else {
+            singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##functionsInitTransformCtx##", apiObject.functionsInitTransformCtx);
+        }
+        */
+        
         singleApiCode += "\n\n" + singleApiSpecificTemplateContent;
     }
     contentTemplateSkeletonAPI = contentTemplateSkeletonAPI.replaceAll("##apiContent##", singleApiCode);
 
     let fieldsParamsBodySave = '';
-    fieldsParamsBodySave = 'id: ctx.request.id'
+    fieldsParamsBodySave = 'id: ctx.request.body.id'
     Object.keys(structureCurrentTableObject.fields).forEach(fieldIndex => {
         let fieldProperties = structureCurrentTableObject.fields[fieldIndex];
         fieldsParamsBodySave += ', ' + fieldProperties.fieldName + ": ctx.request.body." + fieldProperties.fieldName;
@@ -168,7 +192,7 @@ function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
 
 function buildExportFunctionsList() {
     // builds the replacement content for module.exports = {} part of the skeleton
-    let result = '';
+    let result = 'getIdByGuid,';
     for (let i = 0; i < structureCurrentTableObject.api.length; i++) {
         const apiObject = structureCurrentTableObject.api[i]; 
         result += apiObject.name + ",";
@@ -201,7 +225,7 @@ function replaceKeyWordsSingleAPIContent(singleAPITemplateContent) {
     singleAPITemplateContent = singleAPITemplateContent.replaceAll("##tableName##", structureCurrentTableObject.tableName);
 
     let fieldsParamsBodySave = '';
-    fieldsParamsBodySave = 'id: ctx.request.id'
+    fieldsParamsBodySave = 'id: ctx.request.body.id'
     Object.keys(structureCurrentTableObject.fields).forEach(fieldIndex => {
         let fieldProperties = structureCurrentTableObject.fields[fieldIndex];
         fieldsParamsBodySave += ', ' + fieldProperties.fieldName + ": ctx.request.body." + fieldProperties.fieldName;

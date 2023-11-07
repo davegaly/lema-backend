@@ -1,6 +1,6 @@
 const Router = require('@koa/router');
 const teamsProvider = require('../db/providers/teamsProvider.js');
-const teamsBusiness = require('../business/teamsBusiness.js');
+const teamsBusiness  = require('../business/teamsBusiness.js');
 
 // Prefix all routes with: /items
 const teamsRouter = new Router({
@@ -59,8 +59,13 @@ teamsRouter.get('/listAll', async (ctx, next) => {
 
 // save
 teamsRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
-    let params = {id: ctx.request.id, name: ctx.request.body.name, departmentId: ctx.request.body.departmentId};
+  await new Promise((resolve, reject) => {    
+    if (teamsBusiness.saveAdjustInputCtx !== undefined) {
+      console.log(ctx.request.body);
+      ctx = teamsBusiness.saveAdjustInputCtx(ctx);
+      console.log(ctx.request);
+    }
+    let params = {id: ctx.request.body.id, name: ctx.request.body.name, departmentId: ctx.request.body.departmentId};
     console.log("teamsAPI->save(" + JSON.stringify(params) + ") Started");
     teamsProvider.save(params, function(err,result) {
       ctx.body = result;

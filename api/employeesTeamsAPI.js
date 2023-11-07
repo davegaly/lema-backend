@@ -1,5 +1,6 @@
 const Router = require('@koa/router');
 const employeesTeamsProvider = require('../db/providers/employeesTeamsProvider.js');
+const employeesTeamsBusiness  = require('../business/employeesTeamsBusiness.js');
 
 // Prefix all routes with: /items
 const employeesTeamsRouter = new Router({
@@ -34,8 +35,11 @@ employeesTeamsRouter.get('/listEmployeesForTeam', async (ctx, next) => {
 
 // save
 employeesTeamsRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
-    let params = {id: ctx.request.id, employeeId: ctx.request.body.employeeId, teamId: ctx.request.body.teamId};
+  await new Promise((resolve, reject) => {    
+    if (employeesTeamsBusiness.saveAdjustInputCtx !== undefined) {
+      ctx = employeesTeamsBusiness.saveAdjustInputCtx(ctx);
+    }
+    let params = {id: ctx.request.body.id, employeeId: ctx.request.body.employeeId, teamId: ctx.request.body.teamId};
     console.log("employeesTeamsAPI->save(" + JSON.stringify(params) + ") Started");
     employeesTeamsProvider.save(params, function(err,result) {
       ctx.body = result;

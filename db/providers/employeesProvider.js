@@ -8,6 +8,25 @@ const uuid = require('uuid');
 const filepath = "./db/main.sqlite";
 const sharedDBMethods = require('../../db/sharedDBFunctions.js');
 
+async function getIdByGuid(guid, callback) {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
+        if (error) {return console.log(error.message);}
+        db.serialize(() => {
+            let result = -1;
+            db.each(`SELECT id FROM employees WHERE guid=?`, [guid], (error, row) => {
+                console.log("this my row" + JSON.stringify(row));
+                if (error) {return console.log(error);}
+                result = row.id;
+            },
+            function() {
+                console.log("employeesProvider->getIdByGuid Finished (callback)");
+                console.log("employeesProvider->getIdByGuid this is the result: " + result);
+                callback(null, result);
+            });
+        });
+    });
+}
+
 async function getByGuid(params, callback) {
     const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
@@ -124,4 +143,4 @@ async function deleteLogic(params, callback) {
 
 
 
-module.exports = { getByGuid,listAll,save,deleteLogic, }
+module.exports = { getIdByGuid,getByGuid,listAll,save,deleteLogic, }

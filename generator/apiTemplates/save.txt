@@ -1,6 +1,9 @@
 // ##apiName##
 ##tableName##Router.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {    
+    if (##tableName##Business.##apiName##AdjustInputCtx !== undefined) {
+      ctx = ##tableName##Business.##apiName##AdjustInputCtx(ctx);
+    }
     let params = {##listParamsBodySave##};
     console.log("##tableName##API->save(" + JSON.stringify(params) + ") Started");
     ##tableName##Provider.##dbProviderMethodName##(params, function(err,result) {

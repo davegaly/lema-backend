@@ -1,5 +1,6 @@
 const Router = require('@koa/router');
 const departmentsProvider = require('../db/providers/departmentsProvider.js');
+const departmentsBusiness  = require('../business/departmentsBusiness.js');
 
 // Prefix all routes with: /items
 const departmentsRouter = new Router({
@@ -58,8 +59,11 @@ departmentsRouter.get('/listAll', async (ctx, next) => {
 
 // save
 departmentsRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
-    let params = {id: ctx.request.id, name: ctx.request.body.name};
+  await new Promise((resolve, reject) => {    
+    if (departmentsBusiness.saveAdjustInputCtx !== undefined) {
+      ctx = departmentsBusiness.saveAdjustInputCtx(ctx);
+    }
+    let params = {id: ctx.request.body.id, name: ctx.request.body.name};
     console.log("departmentsAPI->save(" + JSON.stringify(params) + ") Started");
     departmentsProvider.save(params, function(err,result) {
       ctx.body = result;
