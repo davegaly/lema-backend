@@ -13,7 +13,7 @@ const testRouter = new Router({
 testRouter.get('/departments', async (ctx, next) => {
   
   await new Promise((resolve, reject) => {
-    departmentsProvider.save({"id":0, "name":"HD Sintesi"}, function(err,result) {
+    departmentsProvider.save({"id":0, "name":"Business Compagnie"}, function(err,result) {
       resolve();
     });    
   }); 
