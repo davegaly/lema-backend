@@ -59,12 +59,11 @@ teamsRouter.get('/listAll', async (ctx, next) => {
 
 // save
 teamsRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {    
+  await new Promise(async (resolve, reject) => {    
     if (teamsBusiness.saveAdjustInputCtx !== undefined) {
-      console.log("1.1 REQUEST1 " + ctx.request.body);
-      //ctx = await teamsBusiness.saveAdjustInputCtx(ctx);
-      teamsBusiness.saveAdjustInputCtx(ctx)
-      console.log("3.1 REQUEST2 " + ctx);
+      let myModifiedCtx = {}
+      myModifiedCtx = await teamsBusiness.saveAdjustInputCtx(ctx);
+      ctx = myModifiedCtx;
     }
     let params = {id: ctx.request.body.id, name: ctx.request.body.name, departmentId: ctx.request.body.departmentId};
     console.log("teamsAPI->save(" + JSON.stringify(params) + ") Started");
