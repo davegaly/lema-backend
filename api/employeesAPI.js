@@ -35,9 +35,9 @@ employeesRouter.get('/listAll', async (ctx, next) => {
 
 // save
 employeesRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {    
+  await new Promise(async (resolve, reject) => {    
     if (employeesBusiness.saveAdjustInputCtx !== undefined) {
-      ctx = employeesBusiness.saveAdjustInputCtx(ctx);
+      await employeesBusiness.saveAdjustInputCtx(ctx);
     }
     let params = {id: ctx.request.body.id, email: ctx.request.body.email};
     console.log("employeesAPI->save(" + JSON.stringify(params) + ") Started");

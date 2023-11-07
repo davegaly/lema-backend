@@ -35,9 +35,9 @@ employeesTeamsRouter.get('/listEmployeesForTeam', async (ctx, next) => {
 
 // save
 employeesTeamsRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {    
+  await new Promise(async (resolve, reject) => {    
     if (employeesTeamsBusiness.saveAdjustInputCtx !== undefined) {
-      ctx = employeesTeamsBusiness.saveAdjustInputCtx(ctx);
+      await employeesTeamsBusiness.saveAdjustInputCtx(ctx);
     }
     let params = {id: ctx.request.body.id, employeeId: ctx.request.body.employeeId, teamId: ctx.request.body.teamId};
     console.log("employeesTeamsAPI->save(" + JSON.stringify(params) + ") Started");

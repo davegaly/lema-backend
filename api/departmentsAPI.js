@@ -59,9 +59,9 @@ departmentsRouter.get('/listAll', async (ctx, next) => {
 
 // save
 departmentsRouter.post('/save', async (ctx, next) => {
-  await new Promise((resolve, reject) => {    
+  await new Promise(async (resolve, reject) => {    
     if (departmentsBusiness.saveAdjustInputCtx !== undefined) {
-      ctx = departmentsBusiness.saveAdjustInputCtx(ctx);
+      await departmentsBusiness.saveAdjustInputCtx(ctx);
     }
     let params = {id: ctx.request.body.id, name: ctx.request.body.name};
     console.log("departmentsAPI->save(" + JSON.stringify(params) + ") Started");
