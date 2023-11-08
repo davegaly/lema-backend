@@ -22,13 +22,13 @@ teamsRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listForGrid
-teamsRouter.get('/listForGrid', async (ctx, next) => {
+teamsRouter.get('/listForGridundefined', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("teamsAPI->listForGrid Started");
     if (teamsBusiness.listForGridAdjustInputCtx !== undefined) {
       await teamsBusiness.listForGridAdjustInputCtx(ctx);
     }
-    teamsProvider.listForGrid(null, function(err,result) {
+    teamsProvider.listForGrid(ctx.params, function(err,result) {
       ctx.body = result;
       console.log("teamsAPI->listForGrid finished");
       resolve();
@@ -37,13 +37,13 @@ teamsRouter.get('/listForGrid', async (ctx, next) => {
 });
 
 // listForDropdown
-teamsRouter.get('/listForDropdown', async (ctx, next) => {
+teamsRouter.get('/listForDropdownundefined', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("teamsAPI->listForDropdown Started");
     if (teamsBusiness.listForDropdownAdjustInputCtx !== undefined) {
       await teamsBusiness.listForDropdownAdjustInputCtx(ctx);
     }
-    teamsProvider.listForDropdown(null, function(err,result) {
+    teamsProvider.listForDropdown(ctx.params, function(err,result) {
       ctx.body = result;
       console.log("teamsAPI->listForDropdown finished");
       resolve();
@@ -52,13 +52,13 @@ teamsRouter.get('/listForDropdown', async (ctx, next) => {
 });
 
 // listAll
-teamsRouter.get('/listAll', async (ctx, next) => {
+teamsRouter.get('/listAllundefined', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("teamsAPI->listAll Started");
     if (teamsBusiness.listAllAdjustInputCtx !== undefined) {
       await teamsBusiness.listAllAdjustInputCtx(ctx);
     }
-    teamsProvider.listAll(null, function(err,result) {
+    teamsProvider.listAll(ctx.params, function(err,result) {
       ctx.body = result;
       console.log("teamsAPI->listAll finished");
       resolve();

@@ -22,13 +22,13 @@ employeesRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listAll
-employeesRouter.get('/listAll', async (ctx, next) => {
+employeesRouter.get('/listAllundefined', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesAPI->listAll Started");
     if (employeesBusiness.listAllAdjustInputCtx !== undefined) {
       await employeesBusiness.listAllAdjustInputCtx(ctx);
     }
-    employeesProvider.listAll(null, function(err,result) {
+    employeesProvider.listAll(ctx.params, function(err,result) {
       ctx.body = result;
       console.log("employeesAPI->listAll finished");
       resolve();

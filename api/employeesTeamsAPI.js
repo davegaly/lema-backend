@@ -10,13 +10,13 @@ const employeesTeamsRouter = new Router({
 
 
 // listTeamsForEmployee
-employeesTeamsRouter.get('/listTeamsForEmployee', async (ctx, next) => {
+employeesTeamsRouter.get('/listTeamsForEmployee/:guid', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesTeamsAPI->listTeamsForEmployee Started");
     if (employeesTeamsBusiness.listTeamsForEmployeeAdjustInputCtx !== undefined) {
       await employeesTeamsBusiness.listTeamsForEmployeeAdjustInputCtx(ctx);
     }
-    employeesTeamsProvider.listTeamsForEmployee(null, function(err,result) {
+    employeesTeamsProvider.listTeamsForEmployee(ctx.params, function(err,result) {
       ctx.body = result;
       console.log("employeesTeamsAPI->listTeamsForEmployee finished");
       resolve();
@@ -25,13 +25,13 @@ employeesTeamsRouter.get('/listTeamsForEmployee', async (ctx, next) => {
 });
 
 // listEmployeesForTeam
-employeesTeamsRouter.get('/listEmployeesForTeam', async (ctx, next) => {
+employeesTeamsRouter.get('/listEmployeesForTeam/:guid', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesTeamsAPI->listEmployeesForTeam Started");
     if (employeesTeamsBusiness.listEmployeesForTeamAdjustInputCtx !== undefined) {
       await employeesTeamsBusiness.listEmployeesForTeamAdjustInputCtx(ctx);
     }
-    employeesTeamsProvider.listEmployeesForTeam(null, function(err,result) {
+    employeesTeamsProvider.listEmployeesForTeam(ctx.params, function(err,result) {
       ctx.body = result;
       console.log("employeesTeamsAPI->listEmployeesForTeam finished");
       resolve();

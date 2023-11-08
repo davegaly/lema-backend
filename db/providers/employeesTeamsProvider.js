@@ -32,11 +32,13 @@ async function listTeamsForEmployee(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("employeesTeamsProvider->listTeamsForEmployee Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM employeesTeams WHERE employeeId=?`, [params.employeeId,], (error, row) => {
+            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id WHERE employeeGuid=?`, [params.employeeGuid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					teamId: row.teamId,
+					teamGuid: row.teamGuid,
+					TeamName: row.TeamName,
 				}                
                 result.push(recordToReturn);
             },
@@ -55,11 +57,13 @@ async function listEmployeesForTeam(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("employeesTeamsProvider->listEmployeesForTeam Started with params: " + JSON.stringify(params));
-            db.each(`SELECT * FROM employeesTeams WHERE teamId=?`, [params.teamId,], (error, row) => {
+            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id WHERE teamGuid=?`, [params.teamGuid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
 					employeeId: row.employeeId,
+					employeeGuid: row.employeeGuid,
+					employeeEmail: row.employeeEmail,
 				}                
                 result.push(recordToReturn);
             },

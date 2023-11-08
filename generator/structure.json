@@ -159,26 +159,26 @@
                 {"fieldName":"employeeId", "fieldType":"NUMBER"},
                 {"fieldName":"teamId", "fieldType":"NUMBER"}
             ],
-            "selectFields":"*",
-            "selectFrom":"employeesTeams",
+            "selectFields":"et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid",
+            "selectFrom":"employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id",
             "api": [         
                 {
                     "type":"list", 
                     "name":"listTeamsForEmployee",
                     "extendedUrl": "/:guid",
-                    "apiReturnFields": ["teamId"],
+                    "apiReturnFields": ["teamId","teamGuid","TeamName"],
                     "dbProviderMethodName":"listTeamsForEmployee",
-                    "whereString": "employeeId=?",
-                    "whereParams": ["params.employeeId"]                    
+                    "whereString": "employeeGuid=?",
+                    "whereParams": ["params.employeeGuid"]                    
                 },
                 {
                     "type":"list", 
                     "name":"listEmployeesForTeam",
                     "extendedUrl": "/:guid",
-                    "apiReturnFields": ["employeeId"],
+                    "apiReturnFields": ["employeeId","employeeGuid","employeeEmail"],
                     "dbProviderMethodName":"listEmployeesForTeam",
-                    "whereString": "teamId=?",
-                    "whereParams": ["params.teamId"]                    
+                    "whereString": "teamGuid=?",
+                    "whereParams": ["params.teamGuid"]                    
                 },                
                 {
                     "type":"save", 
