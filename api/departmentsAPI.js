@@ -23,8 +23,11 @@ departmentsRouter.get('/getByGuid/:guid', async (ctx, next) => {
 
 // listForGrid
 departmentsRouter.get('/listForGrid', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
+  await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listForGrid Started");
+    if (departmentsBusiness.listForGridAdjustInputCtx !== undefined) {
+      await departmentsBusiness.listForGridAdjustInputCtx(ctx);
+    }
     departmentsProvider.listForGrid(null, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->listForGrid finished");
@@ -35,8 +38,11 @@ departmentsRouter.get('/listForGrid', async (ctx, next) => {
 
 // listForDropdown
 departmentsRouter.get('/listForDropdown', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
+  await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listForDropdown Started");
+    if (departmentsBusiness.listForDropdownAdjustInputCtx !== undefined) {
+      await departmentsBusiness.listForDropdownAdjustInputCtx(ctx);
+    }
     departmentsProvider.listForDropdown(null, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->listForDropdown finished");
@@ -47,8 +53,11 @@ departmentsRouter.get('/listForDropdown', async (ctx, next) => {
 
 // listAll
 departmentsRouter.get('/listAll', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
+  await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listAll Started");
+    if (departmentsBusiness.listAllAdjustInputCtx !== undefined) {
+      await departmentsBusiness.listAllAdjustInputCtx(ctx);
+    }
     departmentsProvider.listAll(null, function(err,result) {
       ctx.body = result;
       console.log("departmentsAPI->listAll finished");

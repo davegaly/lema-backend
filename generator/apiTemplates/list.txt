@@ -1,7 +1,10 @@
 // ##apiName##
 ##tableName##Router.get('/##apiName##', async (ctx, next) => {
-  await new Promise((resolve, reject) => {
+  await new Promise( async (resolve, reject) => {
     console.log("##tableName##API->##apiName## Started");
+    if (##tableName##Business.##apiName##AdjustInputCtx !== undefined) {
+      await ##tableName##Business.##apiName##AdjustInputCtx(ctx);
+    }
     ##tableName##Provider.##dbProviderMethodName##(null, function(err,result) {
       ctx.body = result;
       console.log("##tableName##API->##apiName## finished");
