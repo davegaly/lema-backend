@@ -23,7 +23,7 @@ async function ##functionName##(params, callback) {
             db.serialize(() => {
                 console.log("##tableName##Provider->##functionName##(insert) Started");
                 const uniqueUUID = uuid.v4();
-                console.log("Generated guid for new record: " + uniqueUUID);
+                console.log("##tableName##Provider->##functionName## Generated guid for new record: " + uniqueUUID);
                 db.prepare(`INSERT INTO ##tableName## (##listInsertFieldsSQL##,guid,isDeleted) VALUES (##listInsertFieldsValues##,?,?)`, [##listInsertFieldsArray##,uniqueUUID,0]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };

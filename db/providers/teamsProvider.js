@@ -14,7 +14,6 @@ async function getIdByGuid(guid, callback) {
         db.serialize(() => {
             let result = -1;
             db.each(`SELECT id FROM teams WHERE guid=?`, [guid], (error, row) => {
-                console.log("this my row" + JSON.stringify(row));
                 if (error) {return console.log(error);}
                 result = row.id;
             },
@@ -153,7 +152,7 @@ async function save(params, callback) {
             db.serialize(() => {
                 console.log("teamsProvider->save(insert) Started");
                 const uniqueUUID = uuid.v4();
-                console.log("Generated guid for new record: " + uniqueUUID);
+                console.log("teamsProvider->save Generated guid for new record: " + uniqueUUID);
                 db.prepare(`INSERT INTO teams (name,departmentId,guid,isDeleted) VALUES (?,?,?,?)`, [params.name,params.departmentId,uniqueUUID,0]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };

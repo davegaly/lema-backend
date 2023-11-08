@@ -14,7 +14,6 @@ async function getIdByGuid(guid, callback) {
         db.serialize(() => {
             let result = -1;
             db.each(`SELECT id FROM ##tableName## WHERE guid=?`, [guid], (error, row) => {
-                console.log("this my row" + JSON.stringify(row));
                 if (error) {return console.log(error);}
                 result = row.id;
             },
