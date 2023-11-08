@@ -165,6 +165,7 @@
                 {
                     "type":"list", 
                     "name":"listTeamsForEmployee",
+                    "extendedUrl": "/:guid",
                     "apiReturnFields": ["teamId"],
                     "dbProviderMethodName":"listTeamsForEmployee",
                     "whereString": "employeeId=?",
@@ -173,6 +174,7 @@
                 {
                     "type":"list", 
                     "name":"listEmployeesForTeam",
+                    "extendedUrl": "/:guid",
                     "apiReturnFields": ["employeeId"],
                     "dbProviderMethodName":"listEmployeesForTeam",
                     "whereString": "teamId=?",
