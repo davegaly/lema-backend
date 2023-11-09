@@ -22,7 +22,7 @@ departmentsRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listForGrid
-departmentsRouter.get('/listForGridundefined', async (ctx, next) => {
+departmentsRouter.get('/listForGrid', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listForGrid Started");
     if (departmentsBusiness.listForGridAdjustInputCtx !== undefined) {
@@ -37,7 +37,7 @@ departmentsRouter.get('/listForGridundefined', async (ctx, next) => {
 });
 
 // listForDropdown
-departmentsRouter.get('/listForDropdownundefined', async (ctx, next) => {
+departmentsRouter.get('/listForDropdown', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listForDropdown Started");
     if (departmentsBusiness.listForDropdownAdjustInputCtx !== undefined) {
@@ -52,7 +52,7 @@ departmentsRouter.get('/listForDropdownundefined', async (ctx, next) => {
 });
 
 // listAll
-departmentsRouter.get('/listAllundefined', async (ctx, next) => {
+departmentsRouter.get('/listAll', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listAll Started");
     if (departmentsBusiness.listAllAdjustInputCtx !== undefined) {

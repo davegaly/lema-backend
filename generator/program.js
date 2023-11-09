@@ -143,7 +143,14 @@ function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
         let singleApiSpecificTemplateContent = fs.readFileSync(templateAPIFile, 'utf8');
 
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##apiName##", apiObject.name);
-        singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##extendedUrl##", apiObject.extendedUrl);
+        if (apiObject.extendedUrl == null || apiObject.extendedUrl == undefined) {
+            singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##extendedUrl##", '');
+        }
+        else
+        {
+            singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##extendedUrl##", apiObject.extendedUrl);
+        }
+        
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##dbProviderMethodName##", apiObject.dbProviderMethodName);
 
         /*

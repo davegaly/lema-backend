@@ -22,7 +22,7 @@ employeesRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listAll
-employeesRouter.get('/listAllundefined', async (ctx, next) => {
+employeesRouter.get('/listAll', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesAPI->listAll Started");
     if (employeesBusiness.listAllAdjustInputCtx !== undefined) {

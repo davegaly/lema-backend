@@ -1,20 +1,27 @@
-//const employeesTeamsProvider = require('../db/providers/employeesTeamsBusinessProvider.js');
+const employeesProvider = require('../db/providers/employeesProvider.js');
+const teamsProvider = require('../db/providers/teamsProvider.js');
 
-// LIST TEAMS FOR EMPLOYEE API -----------------------------------------------------------------------------------------------------------------------------
+// SAVE EMPLOYEE-TEAM -----------------------------------------------------------------------------------------------------------------------------
 
-/*
-function listTeamsForEmployeeAdjustInputCtx(ctx) {
-    // gui is passing employee guid, we need its id
-    let inputParamGuid = ctx.request.body.employeeGuid;
+function saveAdjustInputCtx(ctx) {
+    // gui is passing employee guid and team guid, we need their ids
+    let inputParamEmployeeGuid = ctx.request.body.employeeGuid;
+    let inputParamTeamGuid = ctx.request.body.teamGuid;
     let employeeId = 0;  
-    employeesTeamsProvider.getIdByGuid(inputParamGuid, function(err,result) {
+    let teamId = 0; 
+    employeesProvider.getIdByGuid(inputParamEmployeeGuid, function(err,result) {
         employeeId = result;
         ctx.request.body.employeeId = employeeId;
+        console.log("Business.saveAdjustInputCtx employeeId:" + employeeId);
     });  
+    teamsProvider.getIdByGuid(inputParamTeamGuid, function(err,result) {
+        teamId = result;
+        ctx.request.body.teamId = teamId;
+        console.log("Business.saveAdjustInputCtx teamId:" + teamId);
+    });      
 }
-*/
 
-// LIST TEAMS FOR EMPLOYEE API -----------------------------------------------------------------------------------------------------------------------------
+// SAVE EMPLOYEE-TEAM -----------------------------------------------------------------------------------------------------------------------------
 
 
-module.exports = { }
+module.exports = { saveAdjustInputCtx }

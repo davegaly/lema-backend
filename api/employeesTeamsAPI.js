@@ -9,6 +9,21 @@ const employeesTeamsRouter = new Router({
 
 
 
+// listAll
+employeesTeamsRouter.get('/listAll', async (ctx, next) => {
+  await new Promise( async (resolve, reject) => {
+    console.log("employeesTeamsAPI->listAll Started");
+    if (employeesTeamsBusiness.listAllAdjustInputCtx !== undefined) {
+      await employeesTeamsBusiness.listAllAdjustInputCtx(ctx);
+    }
+    employeesTeamsProvider.listAll(ctx.params, function(err,result) {
+      ctx.body = result;
+      console.log("employeesTeamsAPI->listAll finished");
+      resolve();
+    });    
+  });  
+});
+
 // listTeamsForEmployee
 employeesTeamsRouter.get('/listTeamsForEmployee/:guid', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {

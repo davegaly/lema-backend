@@ -9,17 +9,44 @@ const filepath = "./db/main.sqlite";
 const sharedDBMethods = require('../../db/sharedDBFunctions.js');
 
 async function getIdByGuid(guid, callback) {
+    console.log("employeesTeamsProvider->getIdByGuid called with guid " + guid);
     const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = -1;
-            db.each(`SELECT id FROM employeesTeams WHERE guid=?`, [guid], (error, row) => {
-                if (error) {return console.log(error);}
+            db.get(`SELECT id FROM employeesTeams WHERE guid=? LIMIT 1`, [guid], (error, row) => {
+                console.log("employeesTeamsProvider->getIdByGuid returned row obj " + JSON.stringify(row));
+                console.log("employeesTeamsProvider->getIdByGuid sql Error:" + error);
                 result = row.id;
+                console.log("employeesTeamsProvider->getIdByGuid this is the result: " + result);
+                callback(null, result);
+            });
+        });
+    });
+}
+
+async function listAll(params, callback) {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
+        if (error) {return console.log(error.message);}
+        db.serialize(() => {
+            let result = [];
+            console.log("employeesTeamsProvider->listAll Started with params: " + JSON.stringify(params));
+            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id `, [], (error, row) => {
+                if (error) {return console.log(error);}
+                let recordToReturn = 
+				{
+					teamId: row.teamId,
+					teamGuid: row.teamGuid,
+					teamName: row.teamName,
+					employeeId: row.employeeId,
+					employeeEmail: row.employeeEmail,
+					employeeGuid: row.employeeGuid,
+				}                
+                result.push(recordToReturn);
             },
             function() {
-                console.log("employeesTeamsProvider->getIdByGuid Finished (callback)");
-                console.log("employeesTeamsProvider->getIdByGuid this is the result: " + result);
+                console.log("employeesTeamsProvider->listAll Finished (callback)");
+                console.log("employeesTeamsProvider->listAll this is the result: " + JSON.stringify(result));
                 callback(null, result);
             });
         });
@@ -32,11 +59,10 @@ async function listTeamsForEmployee(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("employeesTeamsProvider->listTeamsForEmployee Started with params: " + JSON.stringify(params));
-            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id WHERE employeeGuid=?`, [params.employeeGuid,], (error, row) => {
+            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id WHERE employeeGuid=?`, [params.guid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
-					teamId: row.teamId,
 					teamGuid: row.teamGuid,
 					TeamName: row.TeamName,
 				}                
@@ -57,11 +83,10 @@ async function listEmployeesForTeam(params, callback) {
         db.serialize(() => {
             let result = [];
             console.log("employeesTeamsProvider->listEmployeesForTeam Started with params: " + JSON.stringify(params));
-            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id WHERE teamGuid=?`, [params.teamGuid,], (error, row) => {
+            db.each(`SELECT et.*, t.name as teamName, t.guid as teamGuid, e.email as employeeEmail, e.guid as employeeGuid FROM employeesTeams et INNER JOIN teams t ON et.teamId = t.id INNER JOIN employees e ON et.employeeId = e.id WHERE teamGuid=?`, [params.guid,], (error, row) => {
                 if (error) {return console.log(error);}
                 let recordToReturn = 
 				{
-					employeeId: row.employeeId,
 					employeeGuid: row.employeeGuid,
 					employeeEmail: row.employeeEmail,
 				}                
@@ -119,4 +144,4 @@ async function save(params, callback) {
 
 
 
-module.exports = { getIdByGuid,listTeamsForEmployee,listEmployeesForTeam,save, }
+module.exports = { getIdByGuid,listAll,listTeamsForEmployee,listEmployeesForTeam,save, }

@@ -9,16 +9,15 @@ const filepath = "./db/main.sqlite";
 const sharedDBMethods = require('../../db/sharedDBFunctions.js');
 
 async function getIdByGuid(guid, callback) {
+    console.log("departmentsProvider->getIdByGuid called with guid " + guid);
     const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
         db.serialize(() => {
             let result = -1;
-            db.each(`SELECT id FROM departments WHERE guid=?`, [guid], (error, row) => {
-                if (error) {return console.log(error);}
+            db.get(`SELECT id FROM departments WHERE guid=? LIMIT 1`, [guid], (error, row) => {
+                console.log("departmentsProvider->getIdByGuid returned row obj " + JSON.stringify(row));
+                console.log("departmentsProvider->getIdByGuid sql Error:" + error);
                 result = row.id;
-            },
-            function() {
-                console.log("departmentsProvider->getIdByGuid Finished (callback)");
                 console.log("departmentsProvider->getIdByGuid this is the result: " + result);
                 callback(null, result);
             });
