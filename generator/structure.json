@@ -194,6 +194,40 @@
                     "insertFields": ["employeeId","teamId"]
                 }
             ]
+        },
+        {
+            "tableName":"users",
+            "fields":[
+                {"fieldName":"username", "fieldType":"TEXT"},
+                {"fieldName":"password", "fieldType":"TEXT"},
+                {"fieldName":"isEnabled", "fieldType":"TEXT"},
+                {"fieldName":"settings", "fieldType":"TEXT"}
+            ],
+            "selectFields":"*",
+            "selectFrom":"users",
+            "api": [       
+                {
+                    "type":"list", 
+                    "name":"listAll",
+                    "apiReturnFields": ["username","isEnabled","settings","guid"],
+                    "dbProviderMethodName":"listAll"
+                },                
+                {
+                    "type":"save", 
+                    "name":"save",
+                    "dbProviderMethodName":"save",
+                    "updateFields": ["username","isEnabled","settings"],
+                    "insertFields": ["username","isEnabled","settings"]
+                },
+                {
+                    "type":"save", 
+                    "name":"updatePassword",
+                    "dbProviderMethodName":"save",
+                    "updateFields": ["password"],
+                    "insertFields": []
+                }
+
+            ]
         }
     ]
 }
