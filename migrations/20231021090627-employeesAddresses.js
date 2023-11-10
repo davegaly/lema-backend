@@ -20,24 +20,23 @@ exports.up = function(db) {
 
   let tableFields = {};
   tableFields.id = { type: 'int', primaryKey: true, autoIncrement: true };
-  tableFields.userId = 'int';
-  tableFields.firstName = 'string';
-  tableFields.lastName = 'string';
-  tableFields.email = 'string';
-  tableFields.sex = 'string';
-  tableFields.officePhone = 'string';
-  tableFields.homePhone = 'string';
-  tableFields.mobilePhone = 'string';
-  tableFields.emergencyContactInfo = 'string';
+  tableFields.employeeId = 'int';
+  tableFields.fromDate = 'string';
+  tableFields.toDate = 'string';
+  tableFields.streetAddress = 'string';
+  tableFields.city = 'string';
+  tableFields.state = 'string';
+  tableFields.postalCode = 'string';
+  tableFields.country = 'string';
 
   tableFields = migrationHelper.addSystemFields(tableFields);
 
-  return db.createTable('employees', tableFields);
+  return db.createTable('employeesAddresses', tableFields);
 
 };
 
 exports.down = function(db) {
-  return db.dropTable('employees');
+  return db.dropTable('employeesAddresses');
   return null;
 };
 
