@@ -1,0 +1,14 @@
+version: "3.4"
+
+services:
+  lema-backend:
+    image: lema-backend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      SERVER_ENV: prod
+      LISTENING_PORT: 9001
+    ports:
+      - 9001:9001

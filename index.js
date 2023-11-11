@@ -14,6 +14,12 @@ if (settingsServerENV == undefined) {
   console.log("Could not retrieve SERVER_END in .env file. Shutting down...");
   return;
 }
+const settingsListeningPortENV = process.env["LISTENING_PORT"];
+console.log("LISTENING_PORT: " + settingsListeningPortENV);
+if (settingsListeningPortENV == undefined) {
+  console.log("Could not retrieve SERVER_END in .env file. Shutting down...");
+  return;
+}
 
 const app = new Koa();
 
@@ -55,4 +61,4 @@ app.use(testAPI.routes());
 
 console.log("All good. All ready. Fire some API to see things.");
 
-app.listen(3000);
+app.listen(settingsListeningPortENV);
