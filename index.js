@@ -3,6 +3,9 @@ const Koa = require("koa");
 const logger = require("koa-logger");
 const cors = require("@koa/cors");
 const { koaBody } = require("koa-body");
+const bodyParser = require('koa-bodyparser');
+const jwt = require('jsonwebtoken');
+const basicAuth = require('koa-basic-auth');
 
 console.log("App is starting");
 console.log("");
@@ -28,36 +31,28 @@ const app = new Koa();
 app.use(logger());
 app.use(cors());
 app.use(koaBody());
+app.use(bodyParser());
 
-const helloWorld = (ctx) => {
-  ctx.body = "Hello World!!!";
-};
+const SECRET_KEY = 'abcde'; // Replace with your own secret key
 
-const dateTest = (ctx) => {
-  ctx.body = "Dave test rcamadonn";
-};
 
-//router.get('/', helloWorld);
-//router.get('/davetesta', dateTest);
 
+// routes from api files
 let departmentsAPI = require("./api/departmentsAPI.js");
 let teamsAPI = require("./api/teamsAPI.js");
 let employeesAPI = require("./api/employeesAPI.js");
 let employeesTeamsAPI = require("./api/employeesTeamsAPI.js");
 let usersAPI = require("./api/usersAPI.js");
+let authAPI = require("./api/authAPI.js");
 let testAPI = require("./api/testAPI.js");
 
-//app.use(router.routes());
 app.use(departmentsAPI.routes());
 app.use(teamsAPI.routes());
 app.use(employeesAPI.routes());
 app.use(employeesTeamsAPI.routes());
 app.use(usersAPI.routes());
+app.use(authAPI.routes());
 app.use(testAPI.routes());
-
-// testers
-//const departmentsProvider = require('./db/providers/departmentsProvider.js');
-//departmentsProvider.save({"id":0, "name":"Business Compagnie"}, function(){});
 
 console.log("All good. All ready. Fire some API to see things.");
 
