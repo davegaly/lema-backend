@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require('jsonwebtoken');
 
 // Middleware for JWT Auth
@@ -16,7 +17,7 @@ const authCheckCredentials = async (ctx, next) => {
         console.log("headers authorization: " + JSON.stringify(ctx.header.authorization));
         const token = ctx.header.authorization;
         console.log("jwt.verify Started: " + token);
-        const decoded = jwt.verify(token, 'abcde');
+        const decoded = jwt.verify(token, process.env["AUTH_SECRET"]);
         console.log("jwt.verify Finised");
         console.log("decoded: " + JSON.stringify(decoded));
         ctx.state.user = decoded;

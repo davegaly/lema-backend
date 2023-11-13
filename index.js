@@ -23,6 +23,12 @@ if (settingsListeningPortENV == undefined) {
   console.log("Could not retrieve SERVER_END in .env file. Shutting down...");
   return;
 }
+const settingsAuthSecretENV = process.env["AUTH_SECRET"];
+console.log("AUTH_SECRET: " + settingsAuthSecretENV);
+if (settingsAuthSecretENV == undefined) {
+  console.log("Could not retrieve AUTH_SECRET in .env file. Shutting down...");
+  return;
+}
 
 const app = new Koa();
 

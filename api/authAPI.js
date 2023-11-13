@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Router = require('@koa/router');
 const basicAuth = require('koa-basic-auth');
 const jwt = require('jsonwebtoken');
@@ -33,7 +34,7 @@ authRouter.post('/login', async (ctx, next) => {
             else 
             {
                 console.log("authAPI->login generating new token");
-                const token = jwt.sign({ username }, 'abcde', { expiresIn: '10d' });
+                const token = jwt.sign({ username }, process.env["AUTH_SECRET"], { expiresIn: '10d' });
                 console.log("authAPI->login generated token " + token);
                 ctx.body = { token };
             }
