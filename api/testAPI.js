@@ -103,7 +103,7 @@ testRouter.get('/employeesTeams', async (ctx, next) => {
 testRouter.get('/users', async (ctx, next) => {
   
   await new Promise((resolve, reject) => {
-    usersProvider.save({"id":0, "username":"a", "password":"a", "isEnabled":1}, function(err,result) {
+    usersProvider.save({"id":0, "username":"a", "password":"a", "isEnabled":1, "settings":""}, function(err,result) {
       resolve();
     });    
   }); 
