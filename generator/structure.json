@@ -226,7 +226,7 @@
                     "name":"save",
                     "dbProviderMethodName":"save",
                     "updateFields": ["username","isEnabled","settings"],
-                    "insertFields": ["username","isEnabled","settings"]
+                    "insertFields": ["username","password","isEnabled","settings"]
                 },
                 {
                     "type":"save", 

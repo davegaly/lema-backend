@@ -3,6 +3,7 @@ const departmentsProvider = require('../db/providers/departmentsProvider.js');
 const teamsProvider = require('../db/providers/teamsProvider.js');
 const employeesProvider = require('../db/providers/employeesProvider.js');
 const employeesTeamsProvider = require('../db/providers/employeesTeamsProvider.js');
+const usersProvider = require('../db/providers/usersProvider.js');
 
 // Prefix all routes with: /items
 const testRouter = new Router({
@@ -97,6 +98,16 @@ testRouter.get('/employeesTeams', async (ctx, next) => {
     });    
   }); 
   
+});
+
+testRouter.get('/users', async (ctx, next) => {
+  
+  await new Promise((resolve, reject) => {
+    usersProvider.save({"id":0, "username":"a", "password":"a", "isEnabled":1}, function(err,result) {
+      resolve();
+    });    
+  }); 
+
 });
 
 

@@ -101,7 +101,7 @@ async function save(params, callback) {
                 console.log("usersProvider->save(insert) Started");
                 const uniqueUUID = uuid.v4();
                 console.log("usersProvider->save Generated guid for new record: " + uniqueUUID);
-                db.prepare(`INSERT INTO users (username,isEnabled,settings,guid,isDeleted) VALUES (?,?,?,?,?)`, [params.username,params.isEnabled,params.settings,uniqueUUID,0]).run(
+                db.prepare(`INSERT INTO users (username,password,isEnabled,settings,guid,isDeleted) VALUES (?,?,?,?,?,?)`, [params.username,params.password,params.isEnabled,params.settings,uniqueUUID,0]).run(
                     err => {
                         if (err != null) { db.close(); console.log(err.message) };
                     }
