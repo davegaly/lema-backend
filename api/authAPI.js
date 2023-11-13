@@ -1,5 +1,7 @@
 const Router = require('@koa/router');
 const basicAuth = require('koa-basic-auth');
+const jwt = require('jsonwebtoken');
+const authBusiness  = require('../business/authBusiness.js');
 
 // Prefix all routes with: /auth
 const authRouter = new Router({
@@ -17,9 +19,9 @@ authRouter.post('/login', async (ctx, next) => {
         console.log("JWT" + jwt);
 
         if (username === "a" && password === "a") {
-            //const token = jwt.sign({ username }, 'abcde', { expiresIn: '1h' });
-            //ctx.body = { token };
-            ctx.body = "OK";
+            const token = jwt.sign({ username }, 'abcde', { expiresIn: '1h' });
+            ctx.body = { token };
+            //ctx.body = "OK";
         } else {
             ctx.status = 401;
             ctx.body = 'Invalid credentials';

@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const usersProvider = require('../db/providers/usersProvider.js');
 const usersBusiness  = require('../business/usersBusiness.js');
+const authBusiness  = require('../business/authBusiness.js');
 
 // Prefix all routes with: /items
 const usersRouter = new Router({

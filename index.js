@@ -33,10 +33,6 @@ app.use(cors());
 app.use(koaBody());
 app.use(bodyParser());
 
-const SECRET_KEY = 'abcde'; // Replace with your own secret key
-
-
-
 // routes from api files
 let departmentsAPI = require("./api/departmentsAPI.js");
 let teamsAPI = require("./api/teamsAPI.js");

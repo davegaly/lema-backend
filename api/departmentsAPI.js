@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const departmentsProvider = require('../db/providers/departmentsProvider.js');
 const departmentsBusiness  = require('../business/departmentsBusiness.js');
+const authBusiness  = require('../business/authBusiness.js');
 
 // Prefix all routes with: /items
 const departmentsRouter = new Router({
@@ -52,7 +53,7 @@ departmentsRouter.get('/listForDropdown', async (ctx, next) => {
 });
 
 // listAll
-departmentsRouter.get('/listAll', async (ctx, next) => {
+departmentsRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listAll Started");
     if (departmentsBusiness.listAllAdjustInputCtx !== undefined) {
