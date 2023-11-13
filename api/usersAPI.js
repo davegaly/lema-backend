@@ -10,6 +10,18 @@ const usersRouter = new Router({
 
 
 
+// getByUsernamePassword
+usersRouter.get('/getByUsernamePassword/:username/:password', async (ctx, next) => {
+  await new Promise((resolve, reject) => {
+    console.log("usersAPI->getByUsernamePassword, with params " + JSON.stringify(ctx.params) + " Started");
+    usersProvider.getByUsernamePassword(ctx.params.id, function(err,result) {
+      ctx.body = result;
+      console.log("usersAPI->getByUsernamePassword finished");
+      resolve();
+    });    
+  }); 
+});
+
 // listAll
 usersRouter.get('/listAll', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {

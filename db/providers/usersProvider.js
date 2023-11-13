@@ -25,6 +25,30 @@ async function getIdByGuid(guid, callback) {
     });
 }
 
+async function getByUsernamePassword(params, callback) {
+    const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
+        if (error) {return console.log(error.message);}
+        db.serialize(() => {
+            let result = {};
+            console.log("usersProvider->getByUsernamePassword Started with params: " + JSON.stringify(params));
+            db.each(`SELECT * FROM users WHERE username=? AND password=?`, [params.username,params.password,], (error, row) => {
+                if (error) {return console.log(error);}
+                let recordToReturn = 
+				{
+					guid: row.guid,
+					username: row.username,
+				}                
+                result = recordToReturn;
+            },
+            function() {
+                console.log("usersProvider->getByUsernamePassword Finished (callback)");
+                console.log("usersProvider->getByUsernamePassword this is the result: " + JSON.stringify(result));
+                callback(null, result);
+            });
+        });
+    });
+}
+
 async function listAll(params, callback) {
     const db = new sqlite3.Database(sharedDBMethods.returnDBPath(), (error) => {
         if (error) {return console.log(error.message);}
@@ -135,4 +159,4 @@ async function updatePassword(params, callback) {
 
 
 
-module.exports = { getIdByGuid,listAll,save,updatePassword, }
+module.exports = { getIdByGuid,getByUsernamePassword,listAll,save,updatePassword, }

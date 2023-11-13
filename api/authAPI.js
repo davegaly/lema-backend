@@ -2,6 +2,7 @@ const Router = require('@koa/router');
 const basicAuth = require('koa-basic-auth');
 const jwt = require('jsonwebtoken');
 const authBusiness  = require('../business/authBusiness.js');
+const usersProvider = require('../db/providers/usersProvider.js');
 
 // Prefix all routes with: /auth
 const authRouter = new Router({
@@ -12,31 +13,30 @@ const authRouter = new Router({
 authRouter.post('/login', async (ctx, next) => {
 
     await new Promise(async (resolve, reject) => {    
-        
+        console.log("authAPI->login called");
         const { username, password } = ctx.request.body;
-        console.log("username:" + username);
-        console.log("password:" + password);
-        console.log("JWT" + jwt);
+        console.log("authAPI->login param username:" + username);
+        console.log("authAPI->login param password:" + password);
 
-        if (username === "a" && password === "a") {
-            const token = jwt.sign({ username }, 'abcde', { expiresIn: '1h' });
+        // todo look for a valid username/password combination
+        console.log("authAPI->looking for username/password match in db");
+        let usernamePasswordMatchFound = false;
+
+        // user data provider for username/password
+        let dbQueryParams = { username: username, password: password};
+        usersProvider.getByUsernamePassword(dbQueryParams, function(err,result) {
+            console.log("authAPI->login " + result);
+        });  
+
+        // if a record was found, we issue a token for it
+        if (usernamePasswordMatchFound == true) {
+            const token = jwt.sign({ username }, 'abcde', { expiresIn: '10d' });
             ctx.body = { token };
-            //ctx.body = "OK";
         } else {
             ctx.status = 401;
             ctx.body = 'Invalid credentials';
         }
 
-        /*
-        // Check if the credentials are valid (for demo purposes, use a secure method in a real application)
-        if (username === users.username && password === users.password) {
-            const token = jwt.sign({ username }, 'your-secret-key', { expiresIn: '1h' });
-            ctx.body = { token };
-        } else {
-            ctx.status = 401;
-            ctx.body = 'Invalid credentials';
-        }
-        */
         resolve();
 
     });    

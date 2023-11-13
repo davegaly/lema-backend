@@ -152,15 +152,6 @@ function workTemplateSingleAPI(contentTemplateSkeletonAPI) {
         }
         
         singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##dbProviderMethodName##", apiObject.dbProviderMethodName);
-
-        /*
-        // functions
-        if (apiObject.functionsInitTransformCtx == null) {
-            singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##functionsInitTransformCtx##", '');
-        } else {
-            singleApiSpecificTemplateContent = singleApiSpecificTemplateContent.replaceAll("##functionsInitTransformCtx##", apiObject.functionsInitTransformCtx);
-        }
-        */
         
         singleApiCode += "\n\n" + singleApiSpecificTemplateContent;
     }

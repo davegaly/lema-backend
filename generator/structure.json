@@ -207,6 +207,15 @@
             "selectFrom":"users",
             "api": [       
                 {
+                    "type":"get", 
+                    "name":"getByUsernamePassword",
+                    "extendedUrl": "/:username/:password",
+                    "apiReturnFields": ["guid","username"],
+                    "dbProviderMethodName":"getByUsernamePassword",
+                    "whereString": "username=? AND password=?",
+                    "whereParams": ["params.username","params.password"]
+                },   
+                {
                     "type":"list", 
                     "name":"listAll",
                     "apiReturnFields": ["username","isEnabled","settings","guid"],

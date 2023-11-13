@@ -53,7 +53,7 @@ departmentsRouter.get('/listForDropdown', async (ctx, next) => {
 });
 
 // listAll
-departmentsRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx, next) => {
+departmentsRouter.get('/listAll', async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listAll Started");
     if (departmentsBusiness.listAllAdjustInputCtx !== undefined) {
