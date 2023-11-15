@@ -11,7 +11,7 @@ const departmentsRouter = new Router({
 
 
 // getByGuid
-departmentsRouter.get('/getByGuid/:guid', async (ctx, next) => {
+departmentsRouter.get('/getByGuid/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("departmentsAPI->getByGuid, with params " + JSON.stringify(ctx.params) + " Started");
     departmentsProvider.getByGuid(ctx.params.id, function(err,result) {
@@ -23,7 +23,7 @@ departmentsRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listForGrid
-departmentsRouter.get('/listForGrid', async (ctx, next) => {
+departmentsRouter.get('/listForGrid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listForGrid Started");
     if (departmentsBusiness.listForGridAdjustInputCtx !== undefined) {
@@ -38,7 +38,7 @@ departmentsRouter.get('/listForGrid', async (ctx, next) => {
 });
 
 // listForDropdown
-departmentsRouter.get('/listForDropdown', async (ctx, next) => {
+departmentsRouter.get('/listForDropdown', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("departmentsAPI->listForDropdown Started");
     if (departmentsBusiness.listForDropdownAdjustInputCtx !== undefined) {
@@ -68,7 +68,7 @@ departmentsRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx,
 });
 
 // save
-departmentsRouter.post('/save', async (ctx, next) => {
+departmentsRouter.post('/save', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise(async (resolve, reject) => {    
     if (departmentsBusiness.saveAdjustInputCtx !== undefined) {
       await departmentsBusiness.saveAdjustInputCtx(ctx);
@@ -84,7 +84,7 @@ departmentsRouter.post('/save', async (ctx, next) => {
 });
 
 // deleteLogic
-departmentsRouter.get('/deleteLogic/:guid', async (ctx, next) => {
+departmentsRouter.get('/deleteLogic/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("departmentsAPI->deleteLogic(deleteLogic), wtih params " + JSON.stringify(ctx.params) + " Started");
     departmentsProvider.deleteLogic(ctx.params.id, function(err,result) {

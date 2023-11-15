@@ -11,7 +11,7 @@ const teamsRouter = new Router({
 
 
 // getByGuid
-teamsRouter.get('/getByGuid/:guid', async (ctx, next) => {
+teamsRouter.get('/getByGuid/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("teamsAPI->getByGuid, with params " + JSON.stringify(ctx.params) + " Started");
     teamsProvider.getByGuid(ctx.params.id, function(err,result) {
@@ -23,7 +23,7 @@ teamsRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listForGrid
-teamsRouter.get('/listForGrid', async (ctx, next) => {
+teamsRouter.get('/listForGrid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("teamsAPI->listForGrid Started");
     if (teamsBusiness.listForGridAdjustInputCtx !== undefined) {
@@ -38,7 +38,7 @@ teamsRouter.get('/listForGrid', async (ctx, next) => {
 });
 
 // listForDropdown
-teamsRouter.get('/listForDropdown', async (ctx, next) => {
+teamsRouter.get('/listForDropdown', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("teamsAPI->listForDropdown Started");
     if (teamsBusiness.listForDropdownAdjustInputCtx !== undefined) {
@@ -53,7 +53,7 @@ teamsRouter.get('/listForDropdown', async (ctx, next) => {
 });
 
 // listAll
-teamsRouter.get('/listAll', async (ctx, next) => {
+teamsRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("teamsAPI->listAll Started");
     if (teamsBusiness.listAllAdjustInputCtx !== undefined) {
@@ -68,7 +68,7 @@ teamsRouter.get('/listAll', async (ctx, next) => {
 });
 
 // save
-teamsRouter.post('/save', async (ctx, next) => {
+teamsRouter.post('/save', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise(async (resolve, reject) => {    
     if (teamsBusiness.saveAdjustInputCtx !== undefined) {
       await teamsBusiness.saveAdjustInputCtx(ctx);
@@ -84,7 +84,7 @@ teamsRouter.post('/save', async (ctx, next) => {
 });
 
 // deleteLogic
-teamsRouter.get('/deleteLogic/:guid', async (ctx, next) => {
+teamsRouter.get('/deleteLogic/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("teamsAPI->deleteLogic(deleteLogic), wtih params " + JSON.stringify(ctx.params) + " Started");
     teamsProvider.deleteLogic(ctx.params.id, function(err,result) {

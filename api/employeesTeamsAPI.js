@@ -11,7 +11,7 @@ const employeesTeamsRouter = new Router({
 
 
 // listAll
-employeesTeamsRouter.get('/listAll', async (ctx, next) => {
+employeesTeamsRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesTeamsAPI->listAll Started");
     if (employeesTeamsBusiness.listAllAdjustInputCtx !== undefined) {
@@ -26,7 +26,7 @@ employeesTeamsRouter.get('/listAll', async (ctx, next) => {
 });
 
 // listTeamsForEmployee
-employeesTeamsRouter.get('/listTeamsForEmployee/:guid', async (ctx, next) => {
+employeesTeamsRouter.get('/listTeamsForEmployee/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesTeamsAPI->listTeamsForEmployee Started");
     if (employeesTeamsBusiness.listTeamsForEmployeeAdjustInputCtx !== undefined) {
@@ -41,7 +41,7 @@ employeesTeamsRouter.get('/listTeamsForEmployee/:guid', async (ctx, next) => {
 });
 
 // listEmployeesForTeam
-employeesTeamsRouter.get('/listEmployeesForTeam/:guid', async (ctx, next) => {
+employeesTeamsRouter.get('/listEmployeesForTeam/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesTeamsAPI->listEmployeesForTeam Started");
     if (employeesTeamsBusiness.listEmployeesForTeamAdjustInputCtx !== undefined) {
@@ -56,7 +56,7 @@ employeesTeamsRouter.get('/listEmployeesForTeam/:guid', async (ctx, next) => {
 });
 
 // save
-employeesTeamsRouter.post('/save', async (ctx, next) => {
+employeesTeamsRouter.post('/save', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise(async (resolve, reject) => {    
     if (employeesTeamsBusiness.saveAdjustInputCtx !== undefined) {
       await employeesTeamsBusiness.saveAdjustInputCtx(ctx);

@@ -11,7 +11,7 @@ const usersRouter = new Router({
 
 
 // getByUsernamePassword
-usersRouter.get('/getByUsernamePassword/:username/:password', async (ctx, next) => {
+usersRouter.get('/getByUsernamePassword/:username/:password', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("usersAPI->getByUsernamePassword, with params " + JSON.stringify(ctx.params) + " Started");
     usersProvider.getByUsernamePassword(ctx.params.id, function(err,result) {
@@ -23,7 +23,7 @@ usersRouter.get('/getByUsernamePassword/:username/:password', async (ctx, next) 
 });
 
 // listAll
-usersRouter.get('/listAll', async (ctx, next) => {
+usersRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("usersAPI->listAll Started");
     if (usersBusiness.listAllAdjustInputCtx !== undefined) {
@@ -38,7 +38,7 @@ usersRouter.get('/listAll', async (ctx, next) => {
 });
 
 // save
-usersRouter.post('/save', async (ctx, next) => {
+usersRouter.post('/save', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise(async (resolve, reject) => {    
     if (usersBusiness.saveAdjustInputCtx !== undefined) {
       await usersBusiness.saveAdjustInputCtx(ctx);
@@ -54,7 +54,7 @@ usersRouter.post('/save', async (ctx, next) => {
 });
 
 // updatePassword
-usersRouter.post('/updatePassword', async (ctx, next) => {
+usersRouter.post('/updatePassword', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise(async (resolve, reject) => {    
     if (usersBusiness.updatePasswordAdjustInputCtx !== undefined) {
       await usersBusiness.updatePasswordAdjustInputCtx(ctx);

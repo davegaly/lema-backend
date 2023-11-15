@@ -29,6 +29,13 @@ if (settingsAuthSecretENV == undefined) {
   console.log("Could not retrieve AUTH_SECRET in .env file. Shutting down...");
   return;
 }
+const settingsSecureENV = process.env["SECURE"];
+console.log("SECURE: " + settingsSecureENV);
+if (settingsSecureENV == undefined) {
+  console.log("Could not retrieve SECURE in .env file. Shutting down...");
+  return;
+}
+
 
 const app = new Koa();
 

@@ -11,7 +11,7 @@ const employeesRouter = new Router({
 
 
 // getByGuid
-employeesRouter.get('/getByGuid/:guid', async (ctx, next) => {
+employeesRouter.get('/getByGuid/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("employeesAPI->getByGuid, with params " + JSON.stringify(ctx.params) + " Started");
     employeesProvider.getByGuid(ctx.params.id, function(err,result) {
@@ -23,7 +23,7 @@ employeesRouter.get('/getByGuid/:guid', async (ctx, next) => {
 });
 
 // listAll
-employeesRouter.get('/listAll', async (ctx, next) => {
+employeesRouter.get('/listAll', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("employeesAPI->listAll Started");
     if (employeesBusiness.listAllAdjustInputCtx !== undefined) {
@@ -38,7 +38,7 @@ employeesRouter.get('/listAll', async (ctx, next) => {
 });
 
 // save
-employeesRouter.post('/save', async (ctx, next) => {
+employeesRouter.post('/save', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise(async (resolve, reject) => {    
     if (employeesBusiness.saveAdjustInputCtx !== undefined) {
       await employeesBusiness.saveAdjustInputCtx(ctx);
@@ -54,7 +54,7 @@ employeesRouter.post('/save', async (ctx, next) => {
 });
 
 // deleteLogic
-employeesRouter.get('/deleteLogic/:guid', async (ctx, next) => {
+employeesRouter.get('/deleteLogic/:guid', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise((resolve, reject) => {
     console.log("employeesAPI->deleteLogic(deleteLogic), wtih params " + JSON.stringify(ctx.params) + " Started");
     employeesProvider.deleteLogic(ctx.params.id, function(err,result) {

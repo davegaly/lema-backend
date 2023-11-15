@@ -1,5 +1,5 @@
 // ##apiName##
-##tableName##Router.get('/##apiName####extendedUrl##', async (ctx, next) => {
+##tableName##Router.get('/##apiName####extendedUrl##', authBusiness.authCheckCredentials, async (ctx, next) => {
   await new Promise( async (resolve, reject) => {
     console.log("##tableName##API->##apiName## Started");
     if (##tableName##Business.##apiName##AdjustInputCtx !== undefined) {

@@ -5,6 +5,14 @@ const jwt = require('jsonwebtoken');
 const authCheckCredentials = async (ctx, next) => {
     
     console.log("authCheckCredentials Started");
+    let isSecure = process.env["SECURE"];
+
+    // if NOT secure, we allow everything
+    if (isSecure == "false") {
+        console.log("not secure, skipping authorization");
+        await next();
+        return;
+    }
 
     if (ctx.header.authorization == undefined) {
         console.log("headers authorization not found!");
