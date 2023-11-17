@@ -13,7 +13,7 @@ console.log("");
 
 
 const fs = require('fs');
-fs.writeFile('/opt/output.txt', 'davide', (err) => {
+fs.writeFile('/localFolder/output.txt', 'davide', (err) => {
   if (err) {
     console.error('Error writing file:', err);
   } else {
