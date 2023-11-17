@@ -10,6 +10,19 @@ const basicAuth = require('koa-basic-auth');
 console.log("App is starting");
 console.log("");
 
+
+
+const fs = require('fs');
+fs.writeFile('/opt/output.txt', 'davide', (err) => {
+  if (err) {
+    console.error('Error writing file:', err);
+  } else {
+    console.log('File written successfully!');
+  }
+});
+
+
+
 console.log("Checking mandatory .env settings");
 const settingsServerENV = process.env["SERVER_ENV"];
 console.log("SERVER_ENV: " + settingsServerENV);
