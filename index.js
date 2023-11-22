@@ -11,7 +11,7 @@ console.log("App is starting");
 console.log("");
 
 
-
+/*
 const fs = require('fs');
 fs.writeFile('/localFolder/output.txt', 'davide', (err) => {
   if (err) {
@@ -20,7 +20,7 @@ fs.writeFile('/localFolder/output.txt', 'davide', (err) => {
     console.log('File written successfully!');
   }
 });
-
+*/
 
 
 console.log("Checking mandatory .env settings");
