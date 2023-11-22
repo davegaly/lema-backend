@@ -24,25 +24,25 @@ fs.writeFile('/localFolder/output.txt', 'davide', (err) => {
 
 
 console.log("Checking mandatory .env settings");
-const settingsServerENV = process.env["SERVER_ENV"];
+const settingsServerENV = process.env["KOA_SERVER_ENV"];
 console.log("SERVER_ENV: " + settingsServerENV);
 if (settingsServerENV == undefined) {
   console.log("Could not retrieve SERVER_END in .env file. Shutting down...");
   return;
 }
-const settingsListeningPortENV = process.env["LISTENING_PORT"];
+const settingsListeningPortENV = process.env["KOA_LISTENING_PORT"];
 console.log("LISTENING_PORT: " + settingsListeningPortENV);
 if (settingsListeningPortENV == undefined) {
   console.log("Could not retrieve SERVER_END in .env file. Shutting down...");
   return;
 }
-const settingsAuthSecretENV = process.env["AUTH_SECRET"];
+const settingsAuthSecretENV = process.env["KOA_AUTH_SECRET"];
 console.log("AUTH_SECRET: " + settingsAuthSecretENV);
 if (settingsAuthSecretENV == undefined) {
   console.log("Could not retrieve AUTH_SECRET in .env file. Shutting down...");
   return;
 }
-const settingsSecureENV = process.env["SECURE"];
+const settingsSecureENV = process.env["KOA_SECURE"];
 console.log("SECURE: " + settingsSecureENV);
 if (settingsSecureENV == undefined) {
   console.log("Could not retrieve SECURE in .env file. Shutting down...");
