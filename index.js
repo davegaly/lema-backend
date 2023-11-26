@@ -6,6 +6,8 @@ const { koaBody } = require("koa-body");
 const bodyParser = require('koa-bodyparser');
 const jwt = require('jsonwebtoken');
 const basicAuth = require('koa-basic-auth');
+const https = require('https');
+const fs = require('fs');
 
 console.log("App is starting");
 console.log("");
@@ -49,8 +51,18 @@ if (settingsSecureENV == undefined) {
   return;
 }
 
-
 const app = new Koa();
+
+console.log("Start reading certificates");
+const httpCreateServerOptions = {
+  key: fs.readFileSync('./certificates/key.pem'),
+  cert: fs.readFileSync('./certificates/cert.pem'),
+};
+console.log("End reading certificates");
+
+console.log("Configuring http server");
+const httpServer = https.createServer(httpCreateServerOptions, app.callback());
+console.log("Finished starting http server");
 
 // middlewares
 
@@ -76,6 +88,6 @@ app.use(usersAPI.routes());
 app.use(authAPI.routes());
 app.use(testAPI.routes());
 
-console.log("All good. All ready. Fire some API to see things.");
+console.log("All good. All ready. Fire some API to see things. Starting server...");
 
-app.listen(settingsListeningPortENV);
+httpServer.listen(settingsListeningPortENV);
